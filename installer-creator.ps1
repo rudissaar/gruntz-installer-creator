@@ -11,7 +11,7 @@
   - Windows PowerShell 4.0 or higher.
   - Qt Installer Framework 3.0 or higher
 
- .PARAMETER IsoFile
+ .PARAMETER Iso
 
   Path to Gruntz ISO file.
   Default, gruntz.iso
@@ -19,14 +19,35 @@
 
 [CmdletBinding()]
 param(
-    $IsoFile = 'gruntz.iso'
+    $Iso = 'gruntz.iso'
 )
 
 Set-StrictMode -Version 3
 
 function Main
 {
-
+    Validate-Iso $Iso
 }
 
-.Main
+Function Validate-Iso ([string] $Path)
+{
+    $ValidHashes = @(
+        '275547756A472DA85298F7B86FBAF197'
+    )
+
+    if (-Not (Test-Path -PathType Leaf $Path)) {
+        Write-Output "> Specified file doesn't exist on your filesystem."
+        return 1
+    }
+
+    $Hash = Get-FileHash -Algorithm MD5 $Path | Select -ExpandProperty Hash
+
+    if (-Not ($ValidHashes.Contains($Hash))) {
+        Write-Output "> Specified file doesn't match with required fingerprint."
+        return 1
+    }
+
+    return 0
+}
+
+. Main
