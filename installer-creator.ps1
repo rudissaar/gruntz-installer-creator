@@ -19,17 +19,29 @@
 
 [CmdletBinding()]
 param(
-    $Iso = 'gruntz.iso'
+    $Media = 'gruntz.iso'
 )
 
 Set-StrictMode -Version 3
 
 function Main
 {
-    Validate-Iso $Iso
+    Get-7zip
+    Test-Media $Media
 }
 
-Function Validate-Iso ([string] $Path)
+Function Get-7zip
+{
+    if (Get-Command '7z.exe' -ErrorAction SilentlyContinue) {
+        return (Get-Command '7z.exe' | Select -ExpandProperty Source)
+    } else {
+        Write-Output "> Unable to find 7z.exe from your environment's PATH variable."
+    }
+
+    return 1
+}
+
+Function Test-Media ([string] $Path)
 {
     $ValidHashes = @(
         '275547756A472DA85298F7B86FBAF197'
