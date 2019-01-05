@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
-    <DisplayName></DisplayName>
-    <Description></Description>
-    <Version></Version>
-    <ReleaseDate></ReleaseDate>
-    <Default></Default>
-    <Script></Script>
+    <DisplayName>Gruntz</DisplayName>
+    <Description>The Ultimate Puzzle-Strategy-Action Game</Description>
+    <Version>0.1.0</Version>
+    <ReleaseDate>05-01-2019</ReleaseDate>
+    <Default>true</Default>
+    <Script>installscript.qs</Script>
 </Package>
