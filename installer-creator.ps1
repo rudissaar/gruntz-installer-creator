@@ -18,28 +18,30 @@
 #>
 
 [CmdletBinding()]
-param(
+Param(
     $Media = 'gruntz.iso'
 )
 
 Set-StrictMode -Version 3
 
+$DataOutputDir = 'packages/eu.murda.gruntz/data'
+
 function Main
 {
-    if ((Get-7zip) -eq 1) {
+    If ((Get-7zip) -eq 1) {
         Write-Output "> Unable to find 7z.exe from your environment's PATH variable."
         Write-Output '> Aborting.'
-        exit(1)
+        Exit(1)
     }
 
     Write-Output "> 7zip binary found at: '$(Get-7zip)'"
 
-    if (-Not ((Test-Media $Media) -eq 0)) {
-        if ((Test-Media $Media) -eq 1) {
+    If (-Not ((Test-Media $Media) -Eq 0)) {
+        If ((Test-Media $Media) -Eq 1) {
             Write-Output "> Specified ISO file doesn't exist on your filesystem."
         }
 
-        if ((Test-Media $Media) -eq 2) {
+        if ((Test-Media $Media) -Eq 2) {
             Write-Output "> Specified ISO file doesn't match with required fingerprint."
         }
 
@@ -47,9 +49,13 @@ function Main
         exit(1)
     }
 
-    if ((Create-Directory 'packages/eu.murda.gruntz/data') -eq 0) {
-        Write-Output "> Created directory: 'packages/eu.murda.gruntz/data'."
+    if ((Create-Directory $DataOutputDir) -eq 0) {
+        Write-Output "> Created directory: '$DataOutputDir'."
     }
+
+    Expand-Media $Media
+    Remove-UselessFiles
+
 }
 
 function Create-Directory ([string] $Directory)
@@ -88,6 +94,37 @@ Function Test-Media ([string] $Path)
     }
 
     return 0
+}
+
+Function Expand-Media ([string] $Media)
+{
+    & (Get-7zip) 'x' "-o$DataOutputDir" $Media
+}
+
+Function Remove-UselessFiles
+{
+    $UselessFiles = @(
+        'AUTORUN.EXE',
+        'AUTORUN.INF',
+        'CDTEST.EXE',
+        'PREVIEWS',
+        'PREVIEW.EXE',
+        '_SETUP.DLL',
+        '_SETUP.LIB',
+        'SETUP.EXE',
+        'SETUP.INS',
+        'SETUP.PKG',
+        'UNINST.EXE'
+    )
+
+    Foreach ($UselessFile in $UselessFiles)
+    {
+        $UselessFilePath = "$DataOutputDir/$UselessFile"
+
+        If (Test-Path -PathType Any $UselessFilePath) {
+            Remove-Item -Recurse -Force $UselessFilePath
+        }
+    }
 }
 
 . Main
