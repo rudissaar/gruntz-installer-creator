@@ -55,7 +55,7 @@ function Main
 
     Expand-Media $Media
     Remove-UselessFiles
-
+    Rename-Files
 }
 
 function Create-Directory ([string] $Directory)
@@ -124,6 +124,13 @@ Function Remove-UselessFiles
         If (Test-Path -PathType Any $UselessFilePath) {
             Remove-Item -Recurse -Force $UselessFilePath
         }
+    }
+}
+
+Function Rename-Files
+{
+    If (Test-Path -PathType Leaf "$DataOutputDir/AUTORUN.ICO") {
+        Rename-Item -Path "$DataOutputDir/AUTORUN.ICO" -NewName 'GRUNTZ.ICO'    
     }
 }
 
