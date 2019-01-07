@@ -28,7 +28,7 @@ $DataOutputDir = 'packages/eu.murda.gruntz/data'
 
 function Main
 {
-    If ((Get-7zip) -eq 1) {
+    If ((Get-7zip) -Eq 1) {
         Write-Output "> Unable to find 7z.exe from your environment's PATH variable."
         Write-Output '> Aborting.'
         Exit(1)
@@ -41,15 +41,15 @@ function Main
             Write-Output "> Specified ISO file doesn't exist on your filesystem."
         }
 
-        if ((Test-Media $Media) -Eq 2) {
+        If ((Test-Media $Media) -Eq 2) {
             Write-Output "> Specified ISO file doesn't match with required fingerprint."
         }
 
         Write-Output '> Aborting.'
-        exit(1)
+        Exit(1)
     }
 
-    if ((Create-Directory $DataOutputDir) -eq 0) {
+    If ((Create-Directory $DataOutputDir) -Eq 0) {
         Write-Output "> Created directory: '$DataOutputDir'."
     }
 
@@ -58,23 +58,32 @@ function Main
     Rename-Files
 }
 
-function Create-Directory ([string] $Directory)
+Function Create-Directory ([string] $Directory)
 {
-    if (-Not (Test-Path -PathType Container $Directory)) {
+    If (-Not (Test-Path -PathType Container $Directory)) {
         [void] (New-Item -Path $Directory -ItemType Directory)
-        return 0
+        Return 0
     }
 
-    return 1
+    Return 1
 }
 
 Function Get-7zip
 {
-    if (Get-Command '7z.exe' -ErrorAction SilentlyContinue) {
-        return (Get-Command '7z.exe' | Select -ExpandProperty Source)
+    If (Get-Command '7z.exe' -ErrorAction SilentlyContinue) {
+        Return (Get-Command '7z.exe' | Select -ExpandProperty Source)
     }
 
-    return 1
+    Return 1
+}
+
+Function Get-BinaryCreator
+{
+    If (Get-Command 'binarycreator.exe' -ErrorAction SilentlyContinue) {
+        Return (Get-Command 'binarycreator.exe' | Select -ExpandProperty Source)
+    }
+
+    Return 1
 }
 
 Function Test-Media ([string] $Path)
@@ -83,17 +92,17 @@ Function Test-Media ([string] $Path)
         '275547756A472DA85298F7B86FBAF197'
     )
 
-    if (-Not (Test-Path -PathType Leaf $Path)) {
-        return 1
+    If (-Not (Test-Path -PathType Leaf $Path)) {
+        Return 1
     }
 
     $Hash = Get-FileHash -Algorithm MD5 $Path | Select -ExpandProperty Hash
 
-    if (-Not ($ValidHashes.Contains($Hash))) {
-        return 2
+    If (-Not ($ValidHashes.Contains($Hash))) {
+        Return 2
     }
 
-    return 0
+    Return 0
 }
 
 Function Expand-Media ([string] $Media)
@@ -117,7 +126,7 @@ Function Remove-UselessFiles
         'UNINST.EXE'
     )
 
-    Foreach ($UselessFile in $UselessFiles)
+    Foreach ($UselessFile In $UselessFiles)
     {
         $UselessFilePath = "$DataOutputDir/$UselessFile"
 
@@ -130,7 +139,7 @@ Function Remove-UselessFiles
 Function Rename-Files
 {
     If (Test-Path -PathType Leaf "$DataOutputDir/AUTORUN.ICO") {
-        Rename-Item -Path "$DataOutputDir/AUTORUN.ICO" -NewName 'GRUNTZ.ICO'    
+        Rename-Item -Path "$DataOutputDir/AUTORUN.ICO" -NewName 'GRUNTZ.ICO'
     }
 }
 
