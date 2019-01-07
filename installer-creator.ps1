@@ -24,6 +24,8 @@ Param(
 
 Set-StrictMode -Version 3
 
+$7zipFallback = ''
+$BinaryCreatorFallback = ''
 $DataOutputDir = 'packages/eu.murda.gruntz/data'
 
 function Main
@@ -35,6 +37,14 @@ function Main
     }
 
     Write-Output "> 7zip binary found at: '$(Get-7zip)'"
+
+    If ((Get-BinaryCreator) -Eq 1) {
+        Write-Output "> Unable to find binarycreator.exe from your environment's PATH variable."
+        Write-Output '> Aborting.'
+        Exit(1)
+    }
+
+    Write-Output "> BinaryCreator binary found at: '$(Get-BinaryCreator)'"
 
     If (-Not ((Test-Media $Media) -Eq 0)) {
         If ((Test-Media $Media) -Eq 1) {
@@ -72,6 +82,10 @@ Function Get-7zip
 {
     If (Get-Command '7z.exe' -ErrorAction SilentlyContinue) {
         Return (Get-Command '7z.exe' | Select -ExpandProperty Source)
+    } Else {
+        If (-Not ([string]::IsNullOrEmpty($7zipFallback))) {
+            Return $7zipFallback
+        }
     }
 
     Return 1
@@ -81,6 +95,10 @@ Function Get-BinaryCreator
 {
     If (Get-Command 'binarycreator.exe' -ErrorAction SilentlyContinue) {
         Return (Get-Command 'binarycreator.exe' | Select -ExpandProperty Source)
+    } Else {
+        If (-Not ([string]::IsNullOrEmpty($BinaryCreatorFallback))) {
+            Return $BinaryCreatorFallback
+        }
     }
 
     Return 1
@@ -139,7 +157,7 @@ Function Remove-UselessFiles
 Function Rename-Files
 {
     If (Test-Path -PathType Leaf "$DataOutputDir/AUTORUN.ICO") {
-        Rename-Item -Path "$DataOutputDir/AUTORUN.ICO" -NewName 'GRUNTZ.ICO'
+        Move-Item -Force -Path "$DataOutputDir/AUTORUN.ICO" -Destination "$DataOutputDir/GRUNTZ.ICO"
     }
 }
 
