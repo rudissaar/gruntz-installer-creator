@@ -1,2 +1,3 @@
 *.iso
 /packages/eu.murda.gruntz/data/*
+/GruntzInstaller.exe

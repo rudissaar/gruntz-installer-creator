@@ -66,6 +66,7 @@ function Main
     Expand-Media $Media
     Remove-UselessFiles
     Rename-Files
+    Build-Installer
 }
 
 Function Create-Directory ([string] $Directory)
@@ -159,6 +160,11 @@ Function Rename-Files
     If (Test-Path -PathType Leaf "$DataOutputDir/AUTORUN.ICO") {
         Move-Item -Force -Path "$DataOutputDir/AUTORUN.ICO" -Destination "$DataOutputDir/GRUNTZ.ICO"
     }
+}
+
+Function Build-Installer
+{
+    & (Get-BinaryCreator) '-c' 'config/config.xml' '-p' 'packages' 'GruntzInstaller.exe'
 }
 
 . Main

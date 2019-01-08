@@ -13,8 +13,7 @@ Component.prototype.createOperations = function()
             "@TargetDir@/GAME/GRUNTZ.EXE",
             "@StartMenuDir@/Gruntz.lnk",
             "workingDirectory=@TargetDir@",
-            "iconPath=%TargetDir%/GRUNTZ.ICO",
-            "iconId=2",
+            "iconPath=@TargetDir@/GRUNTZ.ICO",
             "description=The Ultimate Puzzle-Strategy-Action Game");
     }
 }
