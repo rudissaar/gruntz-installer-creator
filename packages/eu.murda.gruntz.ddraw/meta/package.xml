@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>DDrawCompat</DisplayName>
+    <Description>DirectDraw compatibility and performance enhancements for Windows Vista, 7, 8 and 10</Description>
+    <Version>0.2.1</Version>
+    <ReleaseDate>2016-05-03</ReleaseDate>
+    <Name>eu.murda.gruntz.ddraw</Name>
+    <Dependencies>eu.murda.gruntz</Dependencies>
+    <SortingPriority>2</SortingPriority>
+    <Default>true</Default>
+</Package>
