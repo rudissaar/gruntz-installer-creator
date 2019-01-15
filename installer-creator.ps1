@@ -75,7 +75,7 @@ function Main
     Expand-Media $Media
     Remove-UselessFiles
     Rename-Files
-    Download-Ddraw
+    Import-Ddraw
     Build-Installer
 }
 
@@ -172,13 +172,21 @@ Function Rename-Files
     }
 }
 
-Function Download-Ddraw
+Function Import-Ddraw
 {
     Try {
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Invoke-WebRequest $DdrawDownloadUrl -OutFile $DdrawArchiveName
     } Catch {
         $_
+    }
+
+    If (Test-Path -PathType Leaf $DdrawArchiveName) {
+        & (Get-7zip) 'x' "-o$DdrawDataOutputDir" $DdrawArchiveName
+    }
+
+    If (Test-Path -PathType Leaf "$DdrawDataOutputDir/license.txt") {
+        Move-Item -Force -Path "$DdrawDataOutputDir/license.txt" -Destination "$DdrawDataOutputDir/ddraw-license.txt"
     }
 }
 
