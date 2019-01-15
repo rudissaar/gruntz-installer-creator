@@ -1,3 +1,4 @@
 *.iso
+*.zip
 /packages/*/data/*
 /GruntzInstaller.exe

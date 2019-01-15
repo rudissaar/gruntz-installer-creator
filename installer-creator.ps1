@@ -26,7 +26,12 @@ Set-StrictMode -Version 3
 
 $7zipFallback = ''
 $BinaryCreatorFallback = ''
-$DataOutputDir = 'packages/eu.murda.gruntz/data'
+
+$GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
+$DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data/GAME'
+
+$DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
+$DdrawArchiveName = Split-Path $DdrawDownloadUrl -Leaf
 
 function Main
 {
@@ -59,13 +64,18 @@ function Main
         Exit(1)
     }
 
-    If ((Create-Directory $DataOutputDir) -Eq 0) {
-        Write-Output "> Created directory: '$DataOutputDir'."
+    If ((Create-Directory $GruntzDataOutputDir) -Eq 0) {
+        Write-Output "> Created directory: '$GruntzDataOutputDir'."
+    }
+
+    If ((Create-Directory $DdrawDataOutputDir) -Eq 0) {
+        Write-Output "> Created directory: '$DdrawDataOutputDir'."
     }
 
     Expand-Media $Media
     Remove-UselessFiles
     Rename-Files
+    Download-Ddraw
     Build-Installer
 }
 
@@ -126,7 +136,7 @@ Function Test-Media ([string] $Path)
 
 Function Expand-Media ([string] $Media)
 {
-    & (Get-7zip) 'x' "-o$DataOutputDir" $Media
+    & (Get-7zip) 'x' "-o$GruntzDataOutputDir" $Media
 }
 
 Function Remove-UselessFiles
@@ -147,7 +157,7 @@ Function Remove-UselessFiles
 
     Foreach ($UselessFile In $UselessFiles)
     {
-        $UselessFilePath = "$DataOutputDir/$UselessFile"
+        $UselessFilePath = "$GruntzDataOutputDir/$UselessFile"
 
         If (Test-Path -PathType Any $UselessFilePath) {
             Remove-Item -Recurse -Force $UselessFilePath
@@ -157,8 +167,18 @@ Function Remove-UselessFiles
 
 Function Rename-Files
 {
-    If (Test-Path -PathType Leaf "$DataOutputDir/AUTORUN.ICO") {
-        Move-Item -Force -Path "$DataOutputDir/AUTORUN.ICO" -Destination "$DataOutputDir/GRUNTZ.ICO"
+    If (Test-Path -PathType Leaf "$GruntzDataOutputDir/AUTORUN.ICO") {
+        Move-Item -Force -Path "$GruntzDataOutputDir/AUTORUN.ICO" -Destination "$GruntzDataOutputDir/GRUNTZ.ICO"
+    }
+}
+
+Function Download-Ddraw
+{
+    Try {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Invoke-WebRequest $DdrawDownloadUrl -OutFile $DdrawArchiveName
+    } Catch {
+        $_
     }
 }
 
