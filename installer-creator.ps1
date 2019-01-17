@@ -136,7 +136,7 @@ Function Test-Media ([string] $Path)
 
 Function Expand-Media ([string] $Media)
 {
-    & (Get-7zip) 'x' "-o$GruntzDataOutputDir" $Media
+    & (Get-7zip) 'x' '-aoa' "-o$GruntzDataOutputDir" $Media
 }
 
 Function Remove-UselessFiles
@@ -182,7 +182,7 @@ Function Import-Ddraw
     }
 
     If (Test-Path -PathType Leaf $DdrawArchiveName) {
-        & (Get-7zip) 'x' "-o$DdrawDataOutputDir" $DdrawArchiveName
+        & (Get-7zip) 'x' '-aoa' "-o$DdrawDataOutputDir" $DdrawArchiveName
     }
 
     If (Test-Path -PathType Leaf "$DdrawDataOutputDir/license.txt") {
