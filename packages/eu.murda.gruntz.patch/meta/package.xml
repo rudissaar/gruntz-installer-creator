@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Patch</DisplayName>
+    <Description>This patch will upgrade your Gruntz game to version 1.01</Description>
+    <Version>1.0.1</Version>
+    <ReleaseDate>2000-01-01</ReleaseDate>
+    <Name>eu.murda.gruntz.patch</Name>
+    <Dependencies>eu.murda.gruntz</Dependencies>
+    <SortingPriority>2</SortingPriority>
+    <Default>false</Default>
+</Package>

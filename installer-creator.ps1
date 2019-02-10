@@ -29,9 +29,13 @@ $BinaryCreatorFallback = ''
 
 $GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
 $DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data/GAME'
+$PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data/GAME'
 
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
 $DdrawArchiveName = Split-Path $DdrawDownloadUrl -Leaf
+
+$PatchDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-patch.zip'
+$PatchArchiveName = Split-Path $PatchDownloadUrl -Leaf
 
 function Main
 {
@@ -76,6 +80,7 @@ function Main
     Remove-UselessFiles
     Rename-Files
     Import-Ddraw
+    Import-Patch
     Build-Installer
 }
 
@@ -187,6 +192,20 @@ Function Import-Ddraw
 
     If (Test-Path -PathType Leaf "$DdrawDataOutputDir/license.txt") {
         Move-Item -Force -Path "$DdrawDataOutputDir/license.txt" -Destination "$DdrawDataOutputDir/ddraw-license.txt"
+    }
+}
+
+Function Import-Patch
+{
+    Try {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Invoke-WebRequest $PatchDownloadUrl -OutFile $PatchArchiveName
+    } Catch {
+        $_
+    }
+
+    If (Test-Path -PathType Leaf $PatchArchiveName) {
+        & (Get-7zip) 'x' '-aoa' "-o$PatchDataOutputDir" $PatchArchiveName
     }
 }
 

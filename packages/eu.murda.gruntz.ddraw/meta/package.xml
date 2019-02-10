@@ -6,6 +6,6 @@
     <ReleaseDate>2016-05-03</ReleaseDate>
     <Name>eu.murda.gruntz.ddraw</Name>
     <Dependencies>eu.murda.gruntz</Dependencies>
-    <SortingPriority>2</SortingPriority>
+    <SortingPriority>3</SortingPriority>
     <Default>true</Default>
 </Package>
