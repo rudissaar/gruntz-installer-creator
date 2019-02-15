@@ -179,11 +179,13 @@ Function Rename-Files
 
 Function Import-Ddraw
 {
-    Try {
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Invoke-WebRequest $DdrawDownloadUrl -OutFile $DdrawArchiveName
-    } Catch {
-        $_
+    If (-Not (Test-Path -PathType Leaf $DdrawArchiveName)) {
+        Try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-WebRequest $DdrawDownloadUrl -OutFile $DdrawArchiveName
+        } Catch {
+            $_
+        }
     }
 
     If (Test-Path -PathType Leaf $DdrawArchiveName) {
@@ -197,11 +199,13 @@ Function Import-Ddraw
 
 Function Import-Patch
 {
-    Try {
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Invoke-WebRequest $PatchDownloadUrl -OutFile $PatchArchiveName
-    } Catch {
-        $_
+    If (-Not (Test-Path -PathType Leaf $PatchArchiveName)) {
+        Try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-WebRequest $PatchDownloadUrl -OutFile $PatchArchiveName
+        } Catch {
+            $_
+        }
     }
 
     If (Test-Path -PathType Leaf $PatchArchiveName) {
