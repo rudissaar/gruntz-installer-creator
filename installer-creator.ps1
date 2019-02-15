@@ -32,10 +32,10 @@ $DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data/GAME'
 $PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data/GAME'
 
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
-$DdrawArchiveName = Split-Path $DdrawDownloadUrl -Leaf
+$DdrawArchiveName = "tmp/" + (Split-Path $DdrawDownloadUrl -Leaf)
 
 $PatchDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-patch.zip'
-$PatchArchiveName = Split-Path $PatchDownloadUrl -Leaf
+$PatchArchiveName = "tmp/" + (Split-Path $PatchDownloadUrl -Leaf)
 
 function Main
 {
