@@ -30,12 +30,16 @@ $BinaryCreatorFallback = ''
 $GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
 $DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data/GAME'
 $PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data/GAME'
+$EditorDataOutputDir = 'packages/eu.murda.gruntz.editor/data'
 
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
 $DdrawArchiveName = "tmp/" + (Split-Path $DdrawDownloadUrl -Leaf)
 
 $PatchDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-patch.zip'
 $PatchArchiveName = "tmp/" + (Split-Path $PatchDownloadUrl -Leaf)
+
+$EditorDownloadUrl = 'http://legacy.murda.eu/downloads/tools/gruntz-editor.zip'
+$EditorArchiveName = "tmp/" + (Split-Path $EditorDownloadUrl -Leaf)
 
 function Main
 {
@@ -81,6 +85,7 @@ function Main
     Rename-Files
     Import-Ddraw
     Import-Patch
+    Import-Editor
     Build-Installer
 }
 
@@ -210,6 +215,22 @@ Function Import-Patch
 
     If (Test-Path -PathType Leaf $PatchArchiveName) {
         & (Get-7zip) 'x' '-aoa' "-o$PatchDataOutputDir" $PatchArchiveName
+    }
+}
+
+Function Import-Editor
+{
+    If (-Not (Test-Path -PathType Leaf $EditorArchiveName)) {
+        Try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-WebRequest $EditorDownloadUrl -OutFile $EditorArchiveName
+        } Catch {
+            $_
+        }
+    }
+
+    If (Test-Path -PathType Leaf $EditorArchiveName) {
+        & (Get-7zip) 'x' '-aoa' "-o$EditorDataOutputDir" $EditorArchiveName
     }
 }
 
