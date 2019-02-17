@@ -31,6 +31,7 @@ $GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
 $DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data/GAME'
 $PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data/GAME'
 $EditorDataOutputDir = 'packages/eu.murda.gruntz.editor/data'
+$SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/GAME/CUSTOM'
 
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
 $DdrawArchiveName = "tmp/" + (Split-Path $DdrawDownloadUrl -Leaf)
@@ -40,6 +41,9 @@ $PatchArchiveName = "tmp/" + (Split-Path $PatchDownloadUrl -Leaf)
 
 $EditorDownloadUrl = 'http://legacy.murda.eu/downloads/tools/gruntz-editor.zip'
 $EditorArchiveName = "tmp/" + (Split-Path $EditorDownloadUrl -Leaf)
+
+$SamplesDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-sample-levels.zip'
+$SamplesArchiveName = "tmp/" + (Split-Path $SamplesDownloadUrl -Leaf)
 
 function Main
 {
@@ -86,6 +90,7 @@ function Main
     Import-Ddraw
     Import-Patch
     Import-Editor
+    Import-Samples
     Build-Installer
 }
 
@@ -231,6 +236,22 @@ Function Import-Editor
 
     If (Test-Path -PathType Leaf $EditorArchiveName) {
         & (Get-7zip) 'x' '-aoa' "-o$EditorDataOutputDir" $EditorArchiveName
+    }
+}
+
+Function Import-Samples
+{
+    If (-Not (Test-Path -PathType Leaf $SamplesArchiveName)) {
+        Try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-WebRequest $SamplesDownloadUrl -OutFile $SamplesArchiveName
+        } Catch {
+            $_
+        }
+    }
+
+    If (Test-Path -PathType Leaf $SamplesArchiveName) {
+        & (Get-7zip) 'x' '-aoa' "-o$SamplesDataOutputDir" $SamplesArchiveName
     }
 }
 
