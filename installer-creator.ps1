@@ -30,7 +30,7 @@ $BinaryCreatorFallback = ''
 $GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
 $DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data/GAME'
 $PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data/GAME'
-$EditorDataOutputDir = 'packages/eu.murda.gruntz.editor/data'
+$EditorDataOutputDir = 'packages/eu.murda.gruntz.editor.editor/data'
 $SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/GAME/CUSTOM'
 
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Editor</DisplayName>
+    <Description>Gruntz Level Editor</Description>
+    <Version>1.0.0.1</Version>
+    <ReleaseDate>1999-01-18</ReleaseDate>
+    <Name>eu.murda.gruntz.editor.editor</Name>
+    <Dependencies>eu.murda.gruntz</Dependencies>
+    <SortingPriority>1</SortingPriority>
+    <Default>false</Default>
+</Package>
