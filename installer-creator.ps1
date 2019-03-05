@@ -24,8 +24,11 @@ Param(
 
 Set-StrictMode -Version 3
 
+$CompressInstallerIfPossible = 1
+
 $7zipFallback = ''
 $BinaryCreatorFallback = ''
+$UpxFallback = ''
 
 $GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
 $DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data/GAME'
@@ -92,6 +95,7 @@ function Main
     Import-Editor
     Import-Samples
     Build-Installer
+    Compress-Installer
 }
 
 Function Create-Directory ([string] $Directory)
@@ -124,6 +128,19 @@ Function Get-BinaryCreator
     } Else {
         If (-Not ([string]::IsNullOrEmpty($BinaryCreatorFallback))) {
             Return $BinaryCreatorFallback
+        }
+    }
+
+    Return 1
+}
+
+Function Get-Upx
+{
+    If (Get-Command 'upx.exe' -ErrorAction SilentlyContinue) {
+        Return (Get-Command 'upx.exe' | Select -ExpandProperty Source)
+    } Else {
+        If (-Not ([string]::IsNullOrEmpty($UpxFallback))) {
+            Return $UpxFallback
         }
     }
 
@@ -258,6 +275,16 @@ Function Import-Samples
 Function Build-Installer
 {
     & (Get-BinaryCreator) '-c' 'config/config.xml' '-p' 'packages' 'GruntzInstaller.exe'
+}
+
+Function Compress-Installer
+{
+    If ($CompressInstallerIfPossible -And (-Not ((Get-Upx) -Eq 1))) {
+        If (Test-Path -PathType Leaf 'GruntzInstaller.exe') {
+            Write-Output "> Compressing Installer to save disk space."
+            & (Get-Upx) '-9' 'GruntzInstaller.exe'
+        }
+    }
 }
 
 . Main
