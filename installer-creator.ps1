@@ -36,17 +36,22 @@ $PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data/GAME'
 $EditorDataOutputDir = 'packages/eu.murda.gruntz.editor.editor/data'
 $SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/GAME/CUSTOM'
 
+$CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.multiplayer.forkland/data/GAME/CUSTOM'
+
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
-$DdrawArchiveName = "tmp/" + (Split-Path $DdrawDownloadUrl -Leaf)
+$DdrawArchiveName = 'tmp/' + (Split-Path $DdrawDownloadUrl -Leaf)
 
 $PatchDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-patch.zip'
-$PatchArchiveName = "tmp/" + (Split-Path $PatchDownloadUrl -Leaf)
+$PatchArchiveName = 'tmp/' + (Split-Path $PatchDownloadUrl -Leaf)
 
 $EditorDownloadUrl = 'http://legacy.murda.eu/downloads/tools/gruntz-editor.zip'
-$EditorArchiveName = "tmp/" + (Split-Path $EditorDownloadUrl -Leaf)
+$EditorArchiveName = 'tmp/' + (Split-Path $EditorDownloadUrl -Leaf)
 
 $SamplesDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-sample-levels.zip'
-$SamplesArchiveName = "tmp/" + (Split-Path $SamplesDownloadUrl -Leaf)
+$SamplesArchiveName = 'tmp/' + (Split-Path $SamplesDownloadUrl -Leaf)
+
+$CustomLevelForklandDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-battlez-forkland.zip'
+$CustomLevelForklandArchiveName = 'tmp/' + (Split-Path $CustomLevelForklandDownloadUrl -Leaf)
 
 function Main
 {
@@ -94,6 +99,9 @@ function Main
     Import-Patch
     Import-Editor
     Import-Samples
+
+    Import-CustomLevelForkland
+
     Build-Installer
     Compress-Installer
 }
@@ -269,6 +277,22 @@ Function Import-Samples
 
     If (Test-Path -PathType Leaf $SamplesArchiveName) {
         & (Get-7zip) 'x' '-aoa' "-o$SamplesDataOutputDir" $SamplesArchiveName
+    }
+}
+
+Function Import-CustomLevelForkland
+{
+    If (-Not (Test-Path -PathType Leaf $CustomLevelForklandArchiveName)) {
+        Try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-WebRequest $CustomLevelForklandDownloadUrl -OutFile $CustomLevelForklandArchiveName
+        } Catch {
+            $_
+        }
+    }
+
+    If (Test-Path -PathType Leaf $CustomLevelForklandArchiveName) {
+        & (Get-7zip) 'x' '-aoa' "-o$CustomLevelForklandDataOutputDir" $CustomLevelForklandArchiveName
     }
 }
 

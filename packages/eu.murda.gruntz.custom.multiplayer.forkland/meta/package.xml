@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Forkland</DisplayName>
+    <Description>A small jungle map full of dangers</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2009-11-09</ReleaseDate>
+    <Name>eu.murda.gruntz.custom.multiplayer.forkland</Name>
+    <Dependencies>eu.murda.gruntz.custom.multiplayer</Dependencies>
+    <SortingPriority>1</SortingPriority>
+    <Default>false</Default>
+</Package>
