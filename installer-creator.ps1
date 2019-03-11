@@ -103,6 +103,7 @@ function Main
     Expand-Media $Media
     Remove-UselessFiles
     Rename-Files
+
     Import-Ddraw
     Import-Patch
     Import-Editor
@@ -110,6 +111,7 @@ function Main
 
     Import-CustomLevelForkland
 
+    Convert-Binaries
     Build-Installer
     Compress-Installer
 }
@@ -321,6 +323,53 @@ Function Import-CustomLevelForkland
 
     If (Test-Path -PathType Leaf $CustomLevelForklandArchiveName) {
         & (Get-7zip) 'x' '-aoa' "-o$CustomLevelForklandDataOutputDir" $CustomLevelForklandArchiveName
+    }
+}
+
+Function Convert-Binaries
+{
+    $ValidHashes = @(
+        '81C7F648DB99501BED6E1EE71E66E4A0'
+    )
+
+    $Hash = Get-FileHash -Algorithm MD5 "$GruntzDataOutputDir/GRUNTZ.EXE" | Select -ExpandProperty Hash
+
+    If ($ValidHashes.Contains($Hash)) {
+        Write-Output "> Cracking $GruntzDataOutputDir/GRUNTZ.EXE"
+
+        Try {
+            [Byte[]] $Bytes = Get-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+
+            $Bytes[0x0001F4CC] = 0x2E
+            $Bytes[0x0001F4A1] = 0xEB
+            $Bytes[0x0001F4F3] = 0x90
+            $Bytes[0x0001F4F4] = 0x90
+            $Bytes[0x0020AE86] = 0x5C
+            $Bytes[0x0020AE9E] = 0x5C
+            $Bytes[0x0020AEA1] = 0x52
+            $Bytes[0x0020AEA2] = 0x55
+            $Bytes[0x0020AEA3] = 0x4E
+            $Bytes[0x0020AEA4] = 0x54
+            $Bytes[0x0020AEA5] = 0x5A
+            $Bytes[0x0020AEA6] = 0x2E
+            $Bytes[0x0020AEA7] = 0x45
+            $Bytes[0x0020AEA8] = 0x58
+            $Bytes[0x0020AEA9] = 0x45
+            $Bytes[0x0020AEAA] = 0x00
+            $Bytes[0x0020AEAB] = 0x00
+            $Bytes[0x0020AEAC] = 0x00
+            $Bytes[0x0020AEAD] = 0x00
+            $Bytes[0x0020AEAE] = 0x00
+            $Bytes[0x0020F4BA] = 0x5C
+            $Bytes[0x0020F826] = 0x5C
+            $Bytes[0x0020F856] = 0x5C
+            $Bytes[0x00212692] = 0x5C
+            $Bytes[0x002126AE] = 0x5C
+
+            $Bytes | Set-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+        } Catch {
+            $_
+        }
     }
 }
 
