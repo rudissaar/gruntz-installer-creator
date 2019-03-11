@@ -31,12 +31,12 @@ $BinaryCreatorFallback = ''
 $UpxFallback = ''
 
 $GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
-$DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data/GAME'
-$PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data/GAME'
+$DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data'
+$PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data'
 $EditorDataOutputDir = 'packages/eu.murda.gruntz.editor.editor/data'
-$SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/GAME/CUSTOM'
+$SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/CUSTOM'
 
-$CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.multiplayer.forkland/data/GAME/CUSTOM'
+$CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.multiplayer.forkland/data/CUSTOM'
 
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
 $DdrawArchiveName = 'tmp/' + (Split-Path $DdrawDownloadUrl -Leaf)
@@ -52,6 +52,13 @@ $SamplesArchiveName = 'tmp/' + (Split-Path $SamplesDownloadUrl -Leaf)
 
 $CustomLevelForklandDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-battlez-forkland.zip'
 $CustomLevelForklandArchiveName = 'tmp/' + (Split-Path $CustomLevelForklandDownloadUrl -Leaf)
+
+$DirectoriesToMergeIntoRoot = @(
+    'GAME',
+    'DATA',
+    'MOVIEZ',
+    'FONTS'
+)
 
 function Main
 {
@@ -92,6 +99,7 @@ function Main
         Write-Output "> Created directory: '$DdrawDataOutputDir'."
     }
 
+    Clear-DataOutputDirs
     Expand-Media $Media
     Remove-UselessFiles
     Rename-Files
@@ -104,16 +112,6 @@ function Main
 
     Build-Installer
     Compress-Installer
-}
-
-Function Create-Directory ([string] $Directory)
-{
-    If (-Not (Test-Path -PathType Container $Directory)) {
-        [void] (New-Item -Path $Directory -ItemType Directory)
-        Return 0
-    }
-
-    Return 1
 }
 
 Function Get-7zip
@@ -155,6 +153,27 @@ Function Get-Upx
     Return 1
 }
 
+Function Create-Directory ([string] $Directory)
+{
+    If (-Not (Test-Path -PathType Container $Directory)) {
+        [void] (New-Item -Path $Directory -ItemType Directory)
+        Return 0
+    }
+
+    Return 1
+}
+
+Function Clear-DataOutputDirs
+{
+    $DataOutputDirs = (Get-ChildItem -Path 'packages' -Filter 'data' -Recurse -Directory).Fullname
+
+    Foreach ($DataOutputDir In $DataOutputDirs) {
+        If (Test-Path -PathType Any $DataOutputDir) {
+            Remove-Item -Recurse -Force $DataOutputDir
+        }
+    }
+}
+
 Function Test-Media ([string] $Path)
 {
     $ValidHashes = @(
@@ -177,6 +196,14 @@ Function Test-Media ([string] $Path)
 Function Expand-Media ([string] $Media)
 {
     & (Get-7zip) 'x' '-aoa' "-o$GruntzDataOutputDir" $Media
+
+    Foreach ($DirectoryToMerge In $DirectoriesToMergeIntoRoot) {
+        $DirectoryPath = "$GruntzDataOutputDir/$DirectoryToMerge"
+
+        If (Test-Path -PathType Container $DirectoryPath) {
+            Get-ChildItem -Path $DirectoryPath -Recurse | Move-Item -Force -Destination $GruntzDataOutputDir
+        }
+    }
 }
 
 Function Remove-UselessFiles
@@ -195,8 +222,9 @@ Function Remove-UselessFiles
         'UNINST.EXE'
     )
 
-    Foreach ($UselessFile In $UselessFiles)
-    {
+    $UselessFiles += $DirectoriesToMergeIntoRoot
+
+    Foreach ($UselessFile In $UselessFiles) {
         $UselessFilePath = "$GruntzDataOutputDir/$UselessFile"
 
         If (Test-Path -PathType Any $UselessFilePath) {

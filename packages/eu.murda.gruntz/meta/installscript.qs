@@ -10,7 +10,7 @@ Component.prototype.createOperations = function()
     if (systemInfo.productType === "windows") {
         component.addOperation(
             "CreateShortcut",
-            "@TargetDir@/GAME/GRUNTZ.EXE",
+            "@TargetDir@/GRUNTZ.EXE",
             "@StartMenuDir@/Gruntz.lnk",
             "workingDirectory=@TargetDir@",
             "iconPath=@TargetDir@/GRUNTZ.ICO",
