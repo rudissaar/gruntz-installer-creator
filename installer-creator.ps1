@@ -24,6 +24,7 @@ Param(
 
 Set-StrictMode -Version 3
 
+$CrackBinariesIfPossible = 1
 $CompressInstallerIfPossible = 1
 
 $7zipFallback = ''
@@ -346,6 +347,10 @@ Function Import-CustomLevelForkland
 
 Function Convert-Binaries
 {
+    If (-Not ($CrackBinariesIfPossible)) {
+        Return
+    }
+
     $ValidHashes = @(
         '81C7F648DB99501BED6E1EE71E66E4A0'
     )
