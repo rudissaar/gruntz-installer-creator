@@ -6,4 +6,5 @@
     <Publisher>Monolith Productions</Publisher>
     <StartMenuDir>Gruntz</StartMenuDir>
     <TargetDir>@RootDir@/Games/Gruntz</TargetDir>
+    <ControlScript>controlscript.qs</ControlScript> 
 </Installer>

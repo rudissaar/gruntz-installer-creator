@@ -393,7 +393,7 @@ Function Convert-Binaries
 
 Function Build-Installer
 {
-    & (Get-BinaryCreator) '-c' 'config/config.xml' '-p' 'packages' 'GruntzInstaller.exe'
+    & (Get-BinaryCreator) '--offline-only' '-c' 'config/config.xml' '-p' 'packages' 'GruntzInstaller.exe'
 }
 
 Function Compress-Installer
