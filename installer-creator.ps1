@@ -232,6 +232,13 @@ Function Remove-UselessFiles
         'SETUP.INS',
         'SETUP.PKG',
         'UNINST.EXE',
+        '_INST32I.EX_',
+        '_ISDEL.EXE',
+        '_ISRES.DLL',
+        'GRUNTZ.HLP',
+        'GRUNTZ.URL',
+        'REGISTER.URL',
+        'REDIST',
         'MOVIEZ'
     )
 
