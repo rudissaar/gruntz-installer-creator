@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Movies</DisplayName>
+    <Description>Offical movie files for game (Logo, Intro, Final)</Description>
+    <Version>0.1.0</Version>
+    <ReleaseDate>2019-03-12</ReleaseDate>
+    <Name>eu.murda.gruntz.movies</Name>
+    <Dependencies>eu.murda.gruntz</Dependencies>
+    <SortingPriority>4</SortingPriority>
+    <Default>true</Default>
+</Package>

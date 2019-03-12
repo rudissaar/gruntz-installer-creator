@@ -31,6 +31,8 @@ $BinaryCreatorFallback = ''
 $UpxFallback = ''
 
 $GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
+$GruntzDataMoviesOutputDir = 'packages/eu.murda.gruntz.movies/data'
+
 $DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data'
 $PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data'
 $EditorDataOutputDir = 'packages/eu.murda.gruntz.editor.editor/data'
@@ -56,7 +58,6 @@ $CustomLevelForklandArchiveName = 'tmp/' + (Split-Path $CustomLevelForklandDownl
 $DirectoriesToMergeIntoRoot = @(
     'GAME',
     'DATA',
-    'MOVIEZ',
     'FONTS'
 )
 
@@ -199,6 +200,15 @@ Function Expand-Media ([string] $Media)
 {
     & (Get-7zip) 'x' '-aoa' "-o$GruntzDataOutputDir" $Media
 
+    If (Test-Path -PathType Container "$GruntzDataOutputDir/MOVIEZ") {
+        Create-Directory($GruntzDataMoviesOutputDir)
+        $GruntzMovieFiles = Get-ChildItem -Path "$GruntzDataOutputDir/MOVIEZ" -Recurse
+
+        Foreach ($GruntzMovieFile In $GruntzMovieFiles) {
+            Move-Item -Force $GruntzMovieFile.Fullname -Destination "$GruntzDataMoviesOutputDir/$GruntzMovieFile"
+        }
+    }
+
     Foreach ($DirectoryToMerge In $DirectoriesToMergeIntoRoot) {
         $DirectoryPath = "$GruntzDataOutputDir/$DirectoryToMerge"
 
@@ -221,7 +231,8 @@ Function Remove-UselessFiles
         'SETUP.EXE',
         'SETUP.INS',
         'SETUP.PKG',
-        'UNINST.EXE'
+        'UNINST.EXE',
+        'MOVIEZ'
     )
 
     $UselessFiles += $DirectoriesToMergeIntoRoot
