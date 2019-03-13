@@ -6,6 +6,6 @@
     <ReleaseDate>2019-03-12</ReleaseDate>
     <Name>eu.murda.gruntz.movies</Name>
     <Dependencies>eu.murda.gruntz</Dependencies>
-    <SortingPriority>4</SortingPriority>
+    <SortingPriority>475</SortingPriority>
     <Default>true</Default>
 </Package>

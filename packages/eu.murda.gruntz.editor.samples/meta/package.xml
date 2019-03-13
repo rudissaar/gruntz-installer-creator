@@ -6,6 +6,6 @@
     <ReleaseDate>1999-01-18</ReleaseDate>
     <Name>eu.murda.gruntz.editor.samples</Name>
     <Dependencies>eu.murda.gruntz.editor</Dependencies>
-    <SortingPriority>1</SortingPriority>
+    <SortingPriority>475</SortingPriority>
     <Default>false</Default>
 </Package>

@@ -6,6 +6,6 @@
     <ReleaseDate>2019-03-08</ReleaseDate>
     <Name>eu.murda.gruntz.custom.multiplayer</Name>
     <Dependencies>eu.murda.gruntz.custom</Dependencies>
-    <SortingPriority>1</SortingPriority>
+    <SortingPriority>500</SortingPriority>
     <Default>false</Default>
 </Package>

@@ -6,6 +6,6 @@
     <ReleaseDate>2019-03-08</ReleaseDate>
     <Name>eu.murda.gruntz.custom</Name>
     <Dependencies>eu.murda.gruntz</Dependencies>
-    <SortingPriority>0</SortingPriority>
+    <SortingPriority>400</SortingPriority>
     <Default>false</Default>
 </Package>

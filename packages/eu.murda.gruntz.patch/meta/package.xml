@@ -6,6 +6,6 @@
     <ReleaseDate>2000-01-01</ReleaseDate>
     <Name>eu.murda.gruntz.patch</Name>
     <Dependencies>eu.murda.gruntz</Dependencies>
-    <SortingPriority>2</SortingPriority>
+    <SortingPriority>450</SortingPriority>
     <Default>false</Default>
 </Package>

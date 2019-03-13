@@ -6,6 +6,6 @@
     <ReleaseDate>2009-11-09</ReleaseDate>
     <Name>eu.murda.gruntz.custom.multiplayer.forkland</Name>
     <Dependencies>eu.murda.gruntz.custom.multiplayer</Dependencies>
-    <SortingPriority>1</SortingPriority>
+    <SortingPriority>500</SortingPriority>
     <Default>false</Default>
 </Package>

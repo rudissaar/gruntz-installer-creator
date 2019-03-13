@@ -5,7 +5,7 @@
     <Version>0.1.0</Version>
     <ReleaseDate>2019-01-08</ReleaseDate>
     <Name>eu.murda.gruntz</Name>
-    <SortingPriority>0</SortingPriority>
+    <SortingPriority>500</SortingPriority>
     <Default>true</Default>
     <Script>installscript.qs</Script>
     <ForcedInstallation>true</ForcedInstallation>
