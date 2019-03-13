@@ -203,6 +203,8 @@ Function Expand-Media ([string] $Media)
 {
     & (Get-7zip) 'x' '-aoa' "-o$GruntzDataOutputDir" $Media
 
+    Copy-Item -Force 'compatibility.bat' -Destination $GruntzDataOutputDir
+
     If (Test-Path -PathType Container "$GruntzDataOutputDir/MOVIEZ") {
         Move-Item -Force -Path "$GruntzDataOutputDir/MOVIEZ" -Destination $GruntzDataMoviesOutputDir
     }

@@ -15,5 +15,12 @@ Component.prototype.createOperations = function()
             "workingDirectory=@TargetDir@",
             "iconPath=@TargetDir@/GRUNTZ.ICO",
             "description=The Ultimate Puzzle-Strategy-Action Game");
+
+            component.addOperation(
+                "Execute",
+                "cmd.exe",
+                "/C",
+                "@TargetDir@/compatibility.bat"
+            );
     }
 }
