@@ -6,5 +6,7 @@
     <Publisher>Monolith Productions</Publisher>
     <StartMenuDir>Gruntz</StartMenuDir>
     <TargetDir>@RootDir@/Games/Gruntz</TargetDir>
-    <ControlScript>controlscript.qs</ControlScript> 
+    <MaintenanceToolName>uninstall</MaintenanceToolName>
+    <MaintenanceToolIniFile>uninstall.ini</MaintenanceToolIniFile>
+    <ControlScript>controlscript.qs</ControlScript>
 </Installer>
