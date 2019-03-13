@@ -351,13 +351,13 @@ Function Convert-Binaries
         Return
     }
 
-    $ValidHashes = @(
+    $ValidGruntzHashes = @(
         '81C7F648DB99501BED6E1EE71E66E4A0'
     )
 
-    $Hash = Get-FileHash -Algorithm MD5 "$GruntzDataOutputDir/GRUNTZ.EXE" | Select -ExpandProperty Hash
+    $GruntzHash = Get-FileHash -Algorithm MD5 "$GruntzDataOutputDir/GRUNTZ.EXE" | Select -ExpandProperty Hash
 
-    If ($ValidHashes.Contains($Hash)) {
+    If ($ValidGruntzHashes.Contains($GruntzHash)) {
         Write-Output "> Cracking $GruntzDataOutputDir/GRUNTZ.EXE"
 
         Try {
@@ -390,6 +390,28 @@ Function Convert-Binaries
             $Bytes[0x002126AE] = 0x5C
 
             $Bytes | Set-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+        } Catch {
+            $_
+        }
+    }
+
+    Return
+
+    $PatchValidHashes = @(
+        '199D4613E4587E1D720623DC11569E4D'
+    )
+
+    $PatchHash = Get-FileHash -Algorithm MD5 "$PatchDataOutputDir/GRUNTZ.EXE" | Select -ExpandProperty Hash
+
+    If ($PatchValidHashes.Contains($PatchHash)) {
+        Write-Output "> Cracking $PatchDataOutputDir/GRUNTZ.EXE"
+
+        Try {
+            [Byte[]] $Bytes = Get-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+
+            $Bytes[0x0001F4DC] = 0x2E
+
+            $Bytes | Set-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
         } Catch {
             $_
         }
