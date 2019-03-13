@@ -395,8 +395,6 @@ Function Convert-Binaries
         }
     }
 
-    Return
-
     $PatchValidHashes = @(
         '199D4613E4587E1D720623DC11569E4D'
     )
@@ -410,6 +408,30 @@ Function Convert-Binaries
             [Byte[]] $Bytes = Get-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
 
             $Bytes[0x0001F4DC] = 0x2E
+            $Bytes[0x0001F4B1] = 0xEB
+            $Bytes[0x0001F503] = 0x90
+            $Bytes[0x0001F504] = 0x90
+            $Bytes[0x0020B286] = 0x5C
+            $Bytes[0x0020B29E] = 0x5C
+            $Bytes[0x0020B2A1] = 0x52
+            $Bytes[0x0020B2A2] = 0x55
+            $Bytes[0x0020B2A3] = 0x4E
+            $Bytes[0x0020B2A4] = 0x54
+            $Bytes[0x0020B2A5] = 0x5A
+            $Bytes[0x0020B2A6] = 0x2E
+            $Bytes[0x0020B2A7] = 0x45
+            $Bytes[0x0020B2A8] = 0x58
+            $Bytes[0x0020B2A9] = 0x45
+            $Bytes[0x0020B2AA] = 0x00
+            $Bytes[0x0020B2AB] = 0x00
+            $Bytes[0x0020B2AC] = 0x00
+            $Bytes[0x0020B2AD] = 0x00
+            $Bytes[0x0020B2AE] = 0x00
+            $Bytes[0x0020F862] = 0x5C
+            $Bytes[0x0020FBCE] = 0x5C
+            $Bytes[0x0020FBFE] = 0x5C
+            $Bytes[0x002129F2] = 0x5C
+            $Bytes[0x00212A0E] = 0x5C
 
             $Bytes | Set-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
         } Catch {
