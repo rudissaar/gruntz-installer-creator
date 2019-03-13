@@ -203,11 +203,7 @@ Function Expand-Media ([string] $Media)
 
     If (Test-Path -PathType Container "$GruntzDataOutputDir/MOVIEZ") {
         Create-Directory($GruntzDataMoviesOutputDir)
-        $GruntzMovieFiles = Get-ChildItem -Path "$GruntzDataOutputDir/MOVIEZ" -Recurse
-
-        Foreach ($GruntzMovieFile In $GruntzMovieFiles) {
-            Move-Item -Force $GruntzMovieFile.Fullname -Destination "$GruntzDataMoviesOutputDir/$GruntzMovieFile"
-        }
+        Move-Item -Force "$GruntzDataOutputDir/MOVIEZ" -Destination $GruntzDataMoviesOutputDir
     }
 
     Foreach ($DirectoryToMerge In $DirectoriesToMergeIntoRoot) {
