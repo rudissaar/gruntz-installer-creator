@@ -93,15 +93,17 @@ function Main
         Exit(1)
     }
 
-    If ((Create-Directory $GruntzDataOutputDir) -Eq 0) {
+
+    Clear-DataOutputDirs
+
+    If ((Create-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
         Write-Output "> Created directory: '$GruntzDataOutputDir'."
     }
 
-    If ((Create-Directory $DdrawDataOutputDir) -Eq 0) {
-        Write-Output "> Created directory: '$DdrawDataOutputDir'."
+    If ((Create-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
+        Write-Output "> Created directory: '$GruntzDataMoviesOutputDir'."
     }
 
-    Clear-DataOutputDirs
     Expand-Media $Media
     Remove-UselessFiles
     Rename-Files
@@ -202,8 +204,7 @@ Function Expand-Media ([string] $Media)
     & (Get-7zip) 'x' '-aoa' "-o$GruntzDataOutputDir" $Media
 
     If (Test-Path -PathType Container "$GruntzDataOutputDir/MOVIEZ") {
-        Create-Directory($GruntzDataMoviesOutputDir)
-        Move-Item -Force "$GruntzDataOutputDir/MOVIEZ" -Destination $GruntzDataMoviesOutputDir
+        Move-Item -Force -Path "$GruntzDataOutputDir/MOVIEZ" -Destination $GruntzDataMoviesOutputDir
     }
 
     Foreach ($DirectoryToMerge In $DirectoriesToMergeIntoRoot) {
@@ -236,6 +237,7 @@ Function Remove-UselessFiles
         'GRUNTZ.URL',
         'REGISTER.URL',
         'REDIST',
+        'SYSTEM',
         'MOVIEZ'
     )
 
