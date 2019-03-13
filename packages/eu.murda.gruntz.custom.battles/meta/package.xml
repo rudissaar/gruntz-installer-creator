@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <Package>
-    <DisplayName>Multiplayer</DisplayName>
-    <Description>Collection of custom multiplayer levels created by Gruntz community</Description>
+    <DisplayName>Battles</DisplayName>
+    <Description>Collection of custom battle levels created by Gruntz community</Description>
     <Version>1.0.0</Version>
     <ReleaseDate>2019-03-08</ReleaseDate>
-    <Name>eu.murda.gruntz.custom.multiplayer</Name>
+    <Name>eu.murda.gruntz.custom.battles</Name>
     <Dependencies>eu.murda.gruntz.custom</Dependencies>
     <SortingPriority>500</SortingPriority>
     <Default>false</Default>

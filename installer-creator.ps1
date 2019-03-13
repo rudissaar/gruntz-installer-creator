@@ -39,7 +39,7 @@ $PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data'
 $EditorDataOutputDir = 'packages/eu.murda.gruntz.editor.editor/data'
 $SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/CUSTOM'
 
-$CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.multiplayer.forkland/data/CUSTOM'
+$CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.battles.forkland/data/CUSTOM'
 
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
 $DdrawArchiveName = 'tmp/' + (Split-Path $DdrawDownloadUrl -Leaf)
