@@ -40,6 +40,7 @@ $EditorDataOutputDir = 'packages/eu.murda.gruntz.editor.editor/data'
 $SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/CUSTOM'
 
 $CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.battles.forkland/data/CUSTOM'
+$CustomLevelDirtlandDataOutputDir = 'packages/eu.murda.gruntz.custom.battles.dirtland/data/CUSTOM'
 
 $DdrawDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-ddraw.zip'
 $DdrawArchiveName = 'tmp/' + (Split-Path $DdrawDownloadUrl -Leaf)
@@ -55,6 +56,9 @@ $SamplesArchiveName = 'tmp/' + (Split-Path $SamplesDownloadUrl -Leaf)
 
 $CustomLevelForklandDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-forkland.zip'
 $CustomLevelForklandArchiveName = 'tmp/' + (Split-Path $CustomLevelForklandDownloadUrl -Leaf)
+
+$CustomLevelDirtlandDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-dirtland.zip'
+$CustomLevelDirtlandArchiveName = 'tmp/' + (Split-Path $CustomLevelDirtlandDownloadUrl -Leaf)
 
 $DirectoriesToMergeIntoRoot = @(
     'GAME',
@@ -114,6 +118,7 @@ function Main
     Import-Samples
 
     Import-CustomLevelForkland
+    Import-CustomLevelDirtland
 
     Convert-Binaries
     Build-Installer
@@ -342,6 +347,22 @@ Function Import-CustomLevelForkland
 
     If (Test-Path -PathType Leaf $CustomLevelForklandArchiveName) {
         & (Get-7zip) 'x' '-aoa' "-o$CustomLevelForklandDataOutputDir" $CustomLevelForklandArchiveName
+    }
+}
+
+Function Import-CustomLevelDirtland
+{
+    If (-Not (Test-Path -PathType Leaf $CustomLevelDirtlandArchiveName)) {
+        Try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-WebRequest $CustomLevelDirtlandDownloadUrl -OutFile $CustomLevelDirtlandArchiveName
+        } Catch {
+            $_
+        }
+    }
+
+    If (Test-Path -PathType Leaf $CustomLevelDirtlandArchiveName) {
+        & (Get-7zip) 'x' '-aoa' "-o$CustomLevelDirtlandDataOutputDir" $CustomLevelDirtlandArchiveName
     }
 }
 
