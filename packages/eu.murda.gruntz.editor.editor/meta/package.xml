@@ -8,4 +8,5 @@
     <Dependencies>eu.murda.gruntz</Dependencies>
     <SortingPriority>500</SortingPriority>
     <Default>false</Default>
+    <Script>installscript.qs</Script>
 </Package>

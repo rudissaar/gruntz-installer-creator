@@ -44,16 +44,16 @@ $CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.battles.for
 $DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
 $DdrawArchiveName = 'tmp/' + (Split-Path $DdrawDownloadUrl -Leaf)
 
-$PatchDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-patch.zip'
+$PatchDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-patch.zip'
 $PatchArchiveName = 'tmp/' + (Split-Path $PatchDownloadUrl -Leaf)
 
-$EditorDownloadUrl = 'http://legacy.murda.eu/downloads/tools/gruntz-editor.zip'
+$EditorDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-editor.zip'
 $EditorArchiveName = 'tmp/' + (Split-Path $EditorDownloadUrl -Leaf)
 
-$SamplesDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-sample-levels.zip'
+$SamplesDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-sample-levels.zip'
 $SamplesArchiveName = 'tmp/' + (Split-Path $SamplesDownloadUrl -Leaf)
 
-$CustomLevelForklandDownloadUrl = 'http://legacy.murda.eu/downloads/misc/gruntz-battlez-forkland.zip'
+$CustomLevelForklandDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-forkland.zip'
 $CustomLevelForklandArchiveName = 'tmp/' + (Split-Path $CustomLevelForklandDownloadUrl -Leaf)
 
 $DirectoriesToMergeIntoRoot = @(

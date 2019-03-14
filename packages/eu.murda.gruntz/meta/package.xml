@@ -7,6 +7,6 @@
     <Name>eu.murda.gruntz</Name>
     <SortingPriority>500</SortingPriority>
     <Default>true</Default>
-    <Script>installscript.qs</Script>
     <ForcedInstallation>true</ForcedInstallation>
+    <Script>installscript.qs</Script>
 </Package>
