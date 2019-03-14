@@ -24,6 +24,8 @@ Param(
 
 Set-StrictMode -Version 3
 
+$ExcludeMovies = 0
+
 $CrackBinariesIfPossible = 1
 $CompressInstallerIfPossible = 1
 
@@ -463,7 +465,19 @@ Function Convert-Binaries
 
 Function Build-Installer
 {
-    & (Get-BinaryCreator) '--offline-only' '-c' 'config/config.xml' '-p' 'packages' 'GruntzInstaller.exe'
+    $Params = @(
+        '--offline-only',
+        '-c', 'config/config.xml',
+        '-p', 'packages'
+    )
+
+    If ($ExcludeMovies) {
+        $Params += '-e', 'eu.murda.gruntz.movies'
+    }
+
+    $Params += 'GruntzInstaller.exe'
+
+    & (Get-BinaryCreator) $Params
 }
 
 Function Compress-Installer
