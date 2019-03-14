@@ -41,7 +41,7 @@ $SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/CUSTOM'
 
 $CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.battles.forkland/data/CUSTOM'
 
-$DdrawDownloadUrl = 'https://github.com/narzoul/DDrawCompat/releases/download/v0.2.1/ddraw.zip'
+$DdrawDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-ddraw.zip'
 $DdrawArchiveName = 'tmp/' + (Split-Path $DdrawDownloadUrl -Leaf)
 
 $PatchDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-patch.zip'
