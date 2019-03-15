@@ -8,5 +8,8 @@
     <TargetDir>@RootDir@/Games/Gruntz</TargetDir>
     <MaintenanceToolName>uninstall</MaintenanceToolName>
     <MaintenanceToolIniFile>uninstall.ini</MaintenanceToolIniFile>
+    <RepositorySettingsPageVisible>false</RepositorySettingsPageVisible>
+    <InstallActionColumnVisible>false</InstallActionColumnVisible>
+    <SupportsModify>false</SupportsModify>
     <ControlScript>controlscript.qs</ControlScript>
 </Installer>

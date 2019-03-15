@@ -27,7 +27,7 @@ Set-StrictMode -Version 3
 $ExcludeMovies = 0
 
 $CrackBinariesIfPossible = 1
-$CompressInstallerIfPossible = 1
+$CompressInstallerIfPossible = 0
 
 $7zipFallback = ''
 $BinaryCreatorFallback = ''
