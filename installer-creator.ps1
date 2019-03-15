@@ -1,11 +1,11 @@
 <#
  .SYNOPSIS
 
-  Runs tasks to generate Monolith's Gruntz (1999) installer for Windows 8+.
+  Runs tasks to generate Monolith's Gruntz (1999) installer for Windows 7+.
 
  .DESCRIPTION
 
-  This scripts tries to convert Gruntz ISO file to installer that is compatible with Microsoft Windows 8, 8.1 and 10.
+  This scripts tries to convert Gruntz ISO file to installer that is compatible with Microsoft Windows 7, 8, 8.1 and 10.
 
   Requirements:
   - Windows PowerShell 4.0 or higher.
