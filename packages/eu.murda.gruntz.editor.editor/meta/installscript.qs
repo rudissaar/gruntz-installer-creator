@@ -10,10 +10,10 @@ Component.prototype.createOperations = function()
     if (systemInfo.productType === "windows") {
         component.addOperation(
             "CreateShortcut",
-            "@TargetDir@/gruntz-editor.exe",
+            "@TargetDir@/GruntzEdit.exe",
             "@StartMenuDir@/Gruntz Level Editor.lnk",
             "workingDirectory=@TargetDir@",
-            "iconPath=@TargetDir@/gruntz-editor.exe",
+            "iconPath=@TargetDir@/GruntzEdit.exe",
             "description=Gruntz Level Editor");
     }
 }
