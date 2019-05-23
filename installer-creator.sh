@@ -16,7 +16,7 @@ if [[ ! -z "${1}" ]]; then
     MEDIA="${1}"
 fi
 
-GRUNTZ_DATA_OUTPUT_DIR='packages/eu.murda.gruntz/data'
+GRUNTZ_DATA_OUTPUT_DIR="packages/eu.murda.gruntz/data"
 GRUNTZ_DATA_MOVIES_OUTPUT_DIR='packages/eu.murda.gruntz.movies/data'
 
 DDRAW_DATA_OUTPUT_DIR='packages/eu.murda.gruntz.ddraw/data'
@@ -45,6 +45,51 @@ CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME="tmp/$(basename ${CUSTOM_LEVEL_FORKLAND_DOWNL
 
 CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL='http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-dirtland.zip'
 CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME="tmp/$(basename ${CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL})"
+
+MERGE_SUBDIRECTORY_TO_ROOT () {
+    if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${1}" ]]; then
+        mv "${GRUNTZ_DATA_OUTPUT_DIR}/${1}/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
+        rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/${1}"
+    fi
+}
+
+DELETE_USELESS_FILES () {
+    for USELESS_FILE in \
+        'AUTORUN.EXE' \
+        'AUTORUN.INF' \
+        'CDTEST.EXE' \
+        'PREVIEWS' \
+        'PREVIEW.EXE' \
+        '_SETUP.DLL' \
+        '_SETUP.LIB' \
+        'SETUP.EXE' \
+        'SETUP.INS' \
+        'SETUP.PKG' \
+        'UNINST.EXE' \
+        '_INST32I.EX_' \
+        '_ISDEL.EXE' \
+        '_ISRES.DLL' \
+        'GRUNTZ.HLP' \
+        'GRUNTZ.URL' \
+        'REGISTER.URL' \
+        'REDIST' \
+        'SYSTEM'
+    do
+        if [[ -f "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}" ]]; then
+            rm "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}"
+        fi
+
+        if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}" ]]; then
+            rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}"
+        fi
+    done
+}
+
+MOVE_MOVIES_TO_SEPARATE_PACKAGE () {
+    if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" ]]; then
+        mv "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" "${GRUNTZ_DATA_MOVIES_OUTPUT_DIR}"
+    fi
+}
 
 which 7z 1> /dev/null 2>&1
 
@@ -81,24 +126,11 @@ done
 
 "${P7ZIP}" x -aoa "-o${GRUNTZ_DATA_OUTPUT_DIR}" "${MEDIA}"
 
-if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/GAME" ]]; then
-    mv "${GRUNTZ_DATA_OUTPUT_DIR}/GAME/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
-    rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/GAME"
-fi
-
-if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/DATA" ]]; then
-    mv "${GRUNTZ_DATA_OUTPUT_DIR}/DATA/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
-    rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/DATA"
-fi
-
-if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/FONTS" ]]; then
-    mv "${GRUNTZ_DATA_OUTPUT_DIR}/FONTS/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
-    rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/FONTS"
-fi
-
-if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" ]]; then
-    mv "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" "${GRUNTZ_DATA_MOVIES_OUTPUT_DIR}"
-fi
+MERGE_SUBDIRECTORY_TO_ROOT 'GAME'
+MERGE_SUBDIRECTORY_TO_ROOT 'DATA'
+MERGE_SUBDIRECTORY_TO_ROOT 'FONTS'
+MOVE_MOVIES_TO_SEPARATE_PACKAGE
+DELETE_USELESS_FILES
 
 "${BINARYCREATOR}" \
     '--offline-only' \
