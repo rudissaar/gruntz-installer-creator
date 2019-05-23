@@ -1,11 +1,5 @@
 #!/usr/bin/env sh
 
-MEDIA='gruntz.iso'
-
-if [[ ! -z "${1}" ]]; then
-    MEDIA="${1}"
-fi
-
 EXCLUDE_MOVIES=0
 
 CRACK_BINARIES_IF_POSSIBLE=1
@@ -14,6 +8,13 @@ COMPRESS_INSTALLER_IF_POSSIBLE=0
 P7ZIP_FALLBACK=''
 BINARY_CREATOR_FALLBACK=''
 UPX_FALLBACK=''
+
+RELATIVE_PATH=$(dirname ${0})
+MEDIA="${RELATIVE_PATH}/gruntz.iso"
+
+if [[ ! -z "${1}" ]]; then
+    MEDIA="${1}"
+fi
 
 GRUNTZ_DATA_OUTPUT_DIR='packages/eu.murda.gruntz/data'
 GRUNTZ_DATA_MOVIES_OUTPUT_DIR='packages/eu.murda.gruntz.movies/data'
@@ -73,7 +74,27 @@ if [[ "${?}" != '0' ]]; then
     exit 1
 fi
 
+for DIR_TO_CLEAR in $(find "${RELATIVE_PATH}" -type d -name 'data')
+do
+    rm -r "${DIR_TO_CLEAR}/"*
+done
+
 "${P7ZIP}" x -aoa "-o${GRUNTZ_DATA_OUTPUT_DIR}" "${MEDIA}"
+
+if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/GAME" ]]; then
+    mv "${GRUNTZ_DATA_OUTPUT_DIR}/GAME/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
+    rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/GAME"
+fi
+
+if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/DATA" ]]; then
+    mv "${GRUNTZ_DATA_OUTPUT_DIR}/DATA/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
+    rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/DATA"
+fi
+
+if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/FONTS" ]]; then
+    mv "${GRUNTZ_DATA_OUTPUT_DIR}/FONTS/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
+    rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/FONTS"
+fi
 
 if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" ]]; then
     mv "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" "${GRUNTZ_DATA_MOVIES_OUTPUT_DIR}"
