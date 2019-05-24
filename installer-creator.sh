@@ -46,6 +46,17 @@ CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME="tmp/$(basename ${CUSTOM_LEVEL_FORKLAND_DOWNL
 CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL='http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-dirtland.zip'
 CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME="tmp/$(basename ${CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL})"
 
+CLEAR_DATA_OUTPUT_DIRS {
+    for DIR_TO_CLEAR in $(find "${RELATIVE_PATH}" -type d -name 'data')
+    do
+        rm -r "${DIR_TO_CLEAR}/"*
+    done
+}
+
+EXPAND_MEDIA () {
+    "${P7ZIP}" x -aoa "-o${GRUNTZ_DATA_OUTPUT_DIR}" "${MEDIA}"
+}
+
 MERGE_SUBDIRECTORY_TO_ROOT () {
     if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${1}" ]]; then
         mv "${GRUNTZ_DATA_OUTPUT_DIR}/${1}/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
@@ -91,6 +102,28 @@ MOVE_MOVIES_TO_SEPARATE_PACKAGE () {
     fi
 }
 
+IMPORT_PATCH () {
+    if [[ ! -f "${PATCH_ARCHIVE_NAME}" ]]; then
+        wget "${PATCH_DOWNLOAD_URL}" -O "${PATCH_ARCHIVE_NAME}"
+    fi
+
+    if [[ -f "${PATCH_ARCHIVE_NAME}" ]]; then
+        "${P7ZIP}" x -aoa "-o${PATCH_DATA_OUTPUT_DIR}" "${PATCH_ARCHIVE_NAME}"
+    fi
+}
+
+REPLACE_BYTE () {
+    printf "$(printf '\\x%02X' ${3})" | dd of="${1}" bs=1 seek=${2} count=1 conv=notrunc 1> /dev/null
+}
+
+BUILD_INSTALLER () {
+    "${BINARYCREATOR}" \
+        '--offline-only' \
+        '-c' 'config/config.xml' \
+        '-p' 'packages' \
+        'GruntzInstaller'
+}
+
 which 7z 1> /dev/null 2>&1
 
 if [[ "${?}" != '0' ]]; then
@@ -119,21 +152,12 @@ if [[ "${?}" != '0' ]]; then
     exit 1
 fi
 
-for DIR_TO_CLEAR in $(find "${RELATIVE_PATH}" -type d -name 'data')
-do
-    rm -r "${DIR_TO_CLEAR}/"*
-done
-
-"${P7ZIP}" x -aoa "-o${GRUNTZ_DATA_OUTPUT_DIR}" "${MEDIA}"
-
+CLEAR_DATA_OUTPUT_DIRS
+EXPAND_MEDIA
 MERGE_SUBDIRECTORY_TO_ROOT 'GAME'
 MERGE_SUBDIRECTORY_TO_ROOT 'DATA'
 MERGE_SUBDIRECTORY_TO_ROOT 'FONTS'
 MOVE_MOVIES_TO_SEPARATE_PACKAGE
 DELETE_USELESS_FILES
-
-"${BINARYCREATOR}" \
-    '--offline-only' \
-    '-c' 'config/config.xml' \
-    '-p' 'packages' \
-    'GruntzInstaller'
+IMPORT_PATCH
+BUILD_INSTALLER
