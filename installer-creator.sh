@@ -6,7 +6,7 @@ CRACK_BINARIES_IF_POSSIBLE=1
 COMPRESS_INSTALLER_IF_POSSIBLE=0
 
 P7ZIP_FALLBACK=''
-BINARY_CREATOR_FALLBACK=''
+BINARYCREATOR_FALLBACK=''
 UPX_FALLBACK=''
 
 RELATIVE_PATH=$(dirname ${0})
@@ -19,7 +19,6 @@ fi
 GRUNTZ_DATA_OUTPUT_DIR="packages/eu.murda.gruntz/data"
 GRUNTZ_DATA_MOVIES_OUTPUT_DIR='packages/eu.murda.gruntz.movies/data'
 
-DDRAW_DATA_OUTPUT_DIR='packages/eu.murda.gruntz.ddraw/data'
 PATCH_DATA_OUTPUT_DIR='packages/eu.murda.gruntz.patch/data'
 
 EDITOR_DATA_OUTPUT_DIR='packages/eu.murda.gruntz.editor.editor/data'
@@ -27,9 +26,6 @@ SAMPLES_DATA_OUTPUT_DIR='packages/eu.murda.gruntz.editor.samples/data/CUSTOM'
 
 CUSTOM_LEVEL_FORKLAND_DATA_OUTPUT_DIR='packages/eu.murda.gruntz.custom.battles.forkland/data/CUSTOM'
 CUSTOM_LEVEL_DIRTLAND_DATA_OUTPUT_DIR='packages/eu.murda.gruntz.custom.battles.dirtland/data/CUSTOM'
-
-DDRAW_DOWNLOAD_URL='http://legacy.murda.eu/downloads/gruntz/gruntz-ddraw.zip'
-DDRAW_ARCHIVE_NAME="tmp/$(basename ${DDRAW_DOWNLOAD_URL})"
 
 PATCH_DOWNLOAD_URL='http://legacy.murda.eu/downloads/gruntz/gruntz-patch.zip'
 PATCH_ARCHIVE_NAME="tmp/$(basename ${PATCH_DOWNLOAD_URL})"
@@ -46,7 +42,7 @@ CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME="tmp/$(basename ${CUSTOM_LEVEL_FORKLAND_DOWNL
 CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL='http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-dirtland.zip'
 CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME="tmp/$(basename ${CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL})"
 
-CLEAR_DATA_OUTPUT_DIRS {
+CLEAR_DATA_OUTPUT_DIRS () {
     for DIR_TO_CLEAR in $(find "${RELATIVE_PATH}" -type d -name 'data')
     do
         rm -r "${DIR_TO_CLEAR}/"*
@@ -117,22 +113,27 @@ REPLACE_BYTE () {
 }
 
 BUILD_INSTALLER () {
-    "${BINARYCREATOR}" \
-        '--offline-only' \
-        '-c' 'config/config.xml' \
-        '-p' 'packages' \
-        'GruntzInstaller'
+    COMMAND="${BINARYCREATOR} --offline-only -c config/config.xml -p packages"
+    COMMAND="${COMMAND} -e eu.murda.gruntz.ddraw"
+    [[ "${EXCLUDE_MOVIES}" == 0 ]] || COMMAND="${COMMAND} -e eu.murda.gruntz.movies"
+    COMMAND="${COMMAND} GruntzInstaller"
+    eval "${COMMAND}"
 }
 
 which 7z 1> /dev/null 2>&1
 
 if [[ "${?}" != '0' ]]; then
-    echo "> Unable to find 7z from your environment's PATH variable."
-    echo '> Aborting.'
-    exit 1
+    if [[ ! -z "${P7ZIP_FALLBACK}" ]]; then
+        P7ZIP="${P7ZIP_FALLBACK}"
+    else
+        echo "> Unable to find 7z from your environment's PATH variable."
+        echo '> Aborting.'
+        exit 1
+    fi
+else
+    P7ZIP="$(which 7z)"
 fi
 
-P7ZIP="$(which 7z)"
 echo "> 7z binary found at: '${P7ZIP}'"
 
 which 7z 1> /dev/null 2>&1
@@ -143,14 +144,21 @@ if [[ "${?}" != '0' ]]; then
     exit 1
 fi
 
-BINARYCREATOR="$(which binarycreator)"
-echo "> BinaryCreator binary found at: '${BINARYCREATOR}'"
+which binarycreator 1> /dev/null 2>&1
 
 if [[ "${?}" != '0' ]]; then
-    echo "> Unable to find binarycreator from your environment's PATH variable."
-    echo '> Aborting.'
-    exit 1
+    if [[ ! -z "${BINARYCREATOR_FALLBACK}" ]]; then
+        BINARYCREATOR="${BINARYCREATOR_FALLBACK_FALLBACK}"
+    else
+        echo "> Unable to find binarycreator from your environment's PATH variable."
+        echo '> Aborting.'
+        exit 1
+    fi
+else
+    BINARYCREATOR="$(which binarycreator)"
 fi
+
+echo "> BinaryCreator binary found at: '${BINARYCREATOR}'"
 
 CLEAR_DATA_OUTPUT_DIRS
 EXPAND_MEDIA
