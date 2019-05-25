@@ -42,6 +42,33 @@ CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME="tmp/$(basename ${CUSTOM_LEVEL_FORKLAND_DOWNL
 CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL='http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-dirtland.zip'
 CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME="tmp/$(basename ${CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL})"
 
+TEST_MEDIA () {
+    if [[ ! -f "${MEDIA}" ]]; then
+        echo "> Specified ISO file doesn't exist on your filesystem."
+        echo '> Aborting.'
+        exit 1
+    fi
+
+    VALID_HASH_FOUND=0
+
+    for VALID_HASH in \
+        '275547756A472DA85298F7B86FBAF197'
+    do
+        MEDIA_HASH="$(md5sum ${MEDIA} | cut -d ' ' -f 1)"
+
+        if [[ "${VALID_HASH}" = "${MEDIA_HASH^^}" ]]; then
+            VALID_HASH_FOUND=1
+            break
+        fi
+    done
+
+    if [[ "${VALID_HASH_FOUND}" != '1' ]]; then
+        echo "> Specified ISO file doesn't match with required fingerprint."
+        echo '> Aborting.'
+        exit 1
+    fi
+}
+
 CLEAR_DATA_OUTPUT_DIRS () {
     for DIR_TO_CLEAR in $(find "${RELATIVE_PATH}" -type d -name 'data')
     do
@@ -200,6 +227,7 @@ fi
 
 echo "> BinaryCreator binary found at: '${BINARYCREATOR}'"
 
+TEST_MEDIA
 CLEAR_DATA_OUTPUT_DIRS
 EXPAND_MEDIA
 MERGE_SUBDIRECTORY_TO_ROOT 'GAME'
