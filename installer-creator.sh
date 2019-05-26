@@ -87,7 +87,7 @@ MERGE_SUBDIRECTORY_TO_ROOT () {
     fi
 }
 
-DELETE_USELESS_FILES () {
+REMOVE_USELESS_FILES () {
     for USELESS_FILE in \
         'AUTORUN.EXE' \
         'AUTORUN.INF' \
@@ -117,6 +117,12 @@ DELETE_USELESS_FILES () {
             rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}"
         fi
     done
+}
+
+RENAME_FILES () {
+    if [[ -f "${GRUNTZ_DATA_OUTPUT_DIR}/AUTORUN.ICO" ]]; then
+        mv "${GRUNTZ_DATA_OUTPUT_DIR}/AUTORUN.ICO" "${GRUNTZ_DATA_OUTPUT_DIR}/GRUNTZ.ICO"
+    fi
 }
 
 MOVE_MOVIES_TO_SEPARATE_PACKAGE () {
@@ -176,7 +182,81 @@ IMPORT_CUSTOM_LEVEL_DIRTLAND () {
 }
 
 REPLACE_BYTE () {
-    printf "$(printf '\\x%02X' ${3})" | dd of="${1}" bs=1 seek=${2} count=1 conv=notrunc 1> /dev/null
+    printf "$(printf '\\x%02X' ${3})" | dd of="${1}" bs=1 seek=$(printf "%d" ${2}) count=1 conv=notrunc &> /dev/null
+}
+
+CONVERT_BINARIES () {
+    if [[ "${CRACK_BINARIES_IF_POSSIBLE}" = '1' ]]; then
+        EXE_FILE="${GRUNTZ_DATA_OUTPUT_DIR}/GRUNTZ.EXE"
+        EXE_HASH="$(md5sum ${EXE_FILE} | cut -d ' ' -f 1)"
+
+        case "${EXE_HASH^^}" in
+            '81C7F648DB99501BED6E1EE71E66E4A0')
+                echo "> Cracking ${EXE_FILE}"
+
+                REPLACE_BYTE "${EXE_FILE}" 0x0001F4CC 0x2E
+                REPLACE_BYTE "${EXE_FILE}" 0x0001F4A1 0xEB
+                REPLACE_BYTE "${EXE_FILE}" 0x0001F4F3 0x90
+                REPLACE_BYTE "${EXE_FILE}" 0x0001F4F4 0x90
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AE86 0x5C
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AE9E 0x5C
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA1 0x52
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA2 0x55
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA3 0x4E
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA4 0x54
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA5 0x5A
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA6 0x2E
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA7 0x45
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA8 0x58
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA9 0x45
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAA 0x00
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAB 0x00
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAC 0x00
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAD 0x00
+                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAE 0x00
+                REPLACE_BYTE "${EXE_FILE}" 0x0020F4BA 0x5C
+                REPLACE_BYTE "${EXE_FILE}" 0x0020F826 0x5C
+                REPLACE_BYTE "${EXE_FILE}" 0x0020F856 0x5C
+                REPLACE_BYTE "${EXE_FILE}" 0x00212692 0x5C
+                REPLACE_BYTE "${EXE_FILE}" 0x002126AE 0x5C
+                ;;
+        esac
+
+        PATCH_FILE="${PATCH_DATA_OUTPUT_DIR}/GRUNTZ.EXE"
+        PATCH_HASH=$(md5sum ${PATCH_FILE} | cut -d ' ' -f 1)
+
+        case "${PATCH_HASH^^}" in
+            '199D4613E4587E1D720623DC11569E4D')
+                echo "> Cracking ${PATCH_FILE}"
+
+                REPLACE_BYTE "${PATCH_FILE}" 0x0001F4DC 0x2E
+                REPLACE_BYTE "${PATCH_FILE}" 0x0001F4B1 0xEB
+                REPLACE_BYTE "${PATCH_FILE}" 0x0001F503 0x90
+                REPLACE_BYTE "${PATCH_FILE}" 0x0001F504 0x90
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B286 0x5C
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B29E 0x5C
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A1 0x52
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A2 0x55
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A3 0x4E
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A4 0x54
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A5 0x5A
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A6 0x2E
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A7 0x45
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A8 0x58
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A9 0x45
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AA 0x00
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AB 0x00
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AC 0x00
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AD 0x00
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AE 0x00
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020F862 0x5C
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020FBCE 0x5C
+                REPLACE_BYTE "${PATCH_FILE}" 0x0020FBFE 0x5C
+                REPLACE_BYTE "${PATCH_FILE}" 0x002129F2 0x5C
+                REPLACE_BYTE "${PATCH_FILE}" 0x00212A0E 0x5C
+                ;;
+        esac
+    fi
 }
 
 BUILD_INSTALLER () {
@@ -234,10 +314,12 @@ MERGE_SUBDIRECTORY_TO_ROOT 'GAME'
 MERGE_SUBDIRECTORY_TO_ROOT 'DATA'
 MERGE_SUBDIRECTORY_TO_ROOT 'FONTS'
 MOVE_MOVIES_TO_SEPARATE_PACKAGE
-DELETE_USELESS_FILES
+REMOVE_USELESS_FILES
+RENAME_FILES
 IMPORT_PATCH
 IMPORT_EDITOR
 IMPORT_SAMPLES
 IMPORT_CUSTOM_LEVEL_FORKLAND
 IMPORT_CUSTOM_LEVEL_FORKLAND
+CONVERT_BINARIES
 BUILD_INSTALLER
