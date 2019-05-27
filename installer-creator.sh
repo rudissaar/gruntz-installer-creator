@@ -3,7 +3,7 @@
 EXCLUDE_MOVIES=0
 
 CRACK_BINARIES_IF_POSSIBLE=1
-COMPRESS_INSTALLER_IF_POSSIBLE=0
+COMPRESS_INSTALLER_IF_POSSIBLE=1
 
 P7ZIP_FALLBACK=''
 BINARYCREATOR_FALLBACK=''
@@ -260,11 +260,22 @@ CONVERT_BINARIES () {
 }
 
 BUILD_INSTALLER () {
+    echo "> Creating installer."
+
     COMMAND="${BINARYCREATOR} --offline-only -c config/config.xml -p packages"
     COMMAND="${COMMAND} -e eu.murda.gruntz.ddraw"
     [[ "${EXCLUDE_MOVIES}" == 0 ]] || COMMAND="${COMMAND} -e eu.murda.gruntz.movies"
     COMMAND="${COMMAND} GruntzInstaller"
     eval "${COMMAND}"
+}
+
+COMPRESS_INSTALLER () {
+    if [[ "${COMPRESS_INSTALLER_IF_POSSIBLE}" = '1' ]]; then
+        if [[ -f 'GruntzInstaller' ]]; then
+            echo "> Compressing Installer to save disk space."
+            "${UPX}" -9 'GruntzInstaller'
+        fi
+    fi
 }
 
 which 7z 1> /dev/null 2>&1
@@ -307,6 +318,25 @@ fi
 
 echo "> BinaryCreator binary found at: '${BINARYCREATOR}'"
 
+which upx 1> /dev/null 2>&1
+
+if [[ "${?}" != '0' ]]; then
+    if [[ ! -z "${UPX_FALLBACK}" ]]; then
+        UPX="${UPX_FALLBACK}"
+        echo "> UPX binary found at: '${UPX}'"
+    else
+        if [[ "${COMPRESS_INSTALLER_IF_POSSIBLE}" = '1' ]]; then
+            echo "> Unable to find upx from your environment's PATH variable."
+            echo '> Compressing installer will be skipped.'
+        fi
+
+        COMPRESS_INSTALLER_IF_POSSIBLE=0
+    fi
+else
+    UPX="$(which upx)"
+    echo "> UPX binary found at: '${UPX}'"
+fi
+
 TEST_MEDIA
 CLEAR_DATA_OUTPUT_DIRS
 EXPAND_MEDIA
@@ -323,3 +353,4 @@ IMPORT_CUSTOM_LEVEL_FORKLAND
 IMPORT_CUSTOM_LEVEL_FORKLAND
 CONVERT_BINARIES
 BUILD_INSTALLER
+COMPRESS_INSTALLER
