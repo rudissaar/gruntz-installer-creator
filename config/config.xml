@@ -5,7 +5,7 @@
     <Title>Gruntz</Title>
     <Publisher>Monolith Productions</Publisher>
     <StartMenuDir>Gruntz</StartMenuDir>
-    <TargetDir>@RootDir@/Games/Gruntz</TargetDir>
+    <TargetDir>@HomeDir@/Games/Gruntz</TargetDir>
     <MaintenanceToolName>uninstall</MaintenanceToolName>
     <MaintenanceToolIniFile>uninstall.ini</MaintenanceToolIniFile>
     <RepositorySettingsPageVisible>false</RepositorySettingsPageVisible>
