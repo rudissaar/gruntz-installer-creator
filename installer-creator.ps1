@@ -10,6 +10,8 @@
   Requirements:
   - Windows PowerShell 4.0 or higher.
   - Qt Installer Framework 3.0 or higher
+  - 7-Zip
+  - UPX (Optional)
 
  .PARAMETER Iso
 
