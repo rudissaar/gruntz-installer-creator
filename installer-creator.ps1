@@ -26,10 +26,12 @@ Param(
 
 Set-StrictMode -Version 3
 
+$InstallerName = 'GruntzInstaller.exe'
+
 $ExcludeMovies = 0
 
 $CrackBinariesIfPossible = 1
-$CompressInstallerIfPossible = 0
+$CompressInstallerIfPossible = 1
 
 $7zipFallback = ''
 $BinaryCreatorFallback = ''
@@ -101,7 +103,6 @@ function Main
         Exit(1)
     }
 
-
     Clear-DataOutputDirs
 
     If ((Create-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
@@ -162,6 +163,11 @@ Function Get-Upx
     } Else {
         If (-Not ([string]::IsNullOrEmpty($UpxFallback))) {
             Return $UpxFallback
+        } Else {
+            If ($CompressInstallerIfPossible) {
+                Write-Output "> Unable to find upx.exe from your environment's PATH variable."
+                echo '> Compressing installer will be skipped.'
+            }
         }
     }
 
@@ -467,6 +473,8 @@ Function Convert-Binaries
 
 Function Build-Installer
 {
+    Write-Output "> Creating installer."
+
     $Params = @(
         '--offline-only',
         '-c', 'config/config.xml',
@@ -477,7 +485,7 @@ Function Build-Installer
         $Params += '-e', 'eu.murda.gruntz.movies'
     }
 
-    $Params += 'GruntzInstaller.exe'
+    $Params += "$InstallerName"
 
     & (Get-BinaryCreator) $Params
 }
@@ -485,9 +493,9 @@ Function Build-Installer
 Function Compress-Installer
 {
     If ($CompressInstallerIfPossible -And (-Not ((Get-Upx) -Eq 1))) {
-        If (Test-Path -PathType Leaf 'GruntzInstaller.exe') {
+        If (Test-Path -PathType Leaf "$InstallerName") {
             Write-Output "> Compressing Installer to save disk space."
-            & (Get-Upx) '-9' 'GruntzInstaller.exe'
+            & (Get-Upx) '-9' "$InstallerName"
         }
     }
 }
