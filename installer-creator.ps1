@@ -26,7 +26,8 @@ Param(
 
 Set-StrictMode -Version 3
 
-$InstallerName = 'GruntzInstaller.exe'
+$InstallerName = 'dist/gruntz-installer'
+$InstallerExtension = '.exe'
 
 $ExcludeMovies = 0
 
@@ -483,8 +484,10 @@ Function Build-Installer
 
     If ($ExcludeMovies) {
         $Params += '-e', 'eu.murda.gruntz.movies'
+        $InstallerName = ("$InstallerName" +'-no-movie')
     }
 
+    $InstallerName = ("$InstallerName" + $InstallerExtension)
     $Params += "$InstallerName"
 
     & (Get-BinaryCreator) $Params

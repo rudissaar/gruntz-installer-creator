@@ -1,5 +1,24 @@
 #!/usr/bin/env sh
 
+# SYNOPSIS
+# Runs tasks to generate Monolith's Gruntz (1999) installer for UNIX-like opertaing system.
+
+# DESCRIPTION
+# This scripts tries to convert Gruntz ISO file to installer that is compatible with UNIX-like opertaing system.
+
+# Requirements:
+# - wget
+# - p7zip
+# - Qt Installer Framework 3.0 or higher
+# - UPX (Optional)
+
+# PARAMETER Iso (${1})
+# - Path to Gruntz ISO file.
+# - Default, gruntz.iso
+
+INSTALLER_NAME='dist/gruntz-installer'
+INSTALLER_EXTENSION='.run'
+
 EXCLUDE_MOVIES=0
 
 CRACK_BINARIES_IF_POSSIBLE=1
@@ -264,16 +283,22 @@ BUILD_INSTALLER () {
 
     COMMAND="${BINARYCREATOR} --offline-only -c config/config.xml -p packages"
     COMMAND="${COMMAND} -e eu.murda.gruntz.ddraw"
-    [[ "${EXCLUDE_MOVIES}" == 0 ]] || COMMAND="${COMMAND} -e eu.murda.gruntz.movies"
-    COMMAND="${COMMAND} GruntzInstaller"
+
+    if [[ "${EXCLUDE_MOVIES}" != 0 ]]; then
+        COMMAND="${COMMAND} -e eu.murda.gruntz.movies"
+        INSTALLER_NAME="${INSTALLER_NAME}-no-movie"
+    fi
+
+    INSTALLER_NAME="${INSTALLER_NAME}{$INSTALLER_EXTENSION}"
+    COMMAND="${COMMAND} ${INSTALLER_NAME}"
     eval "${COMMAND}"
 }
 
 COMPRESS_INSTALLER () {
     if [[ "${COMPRESS_INSTALLER_IF_POSSIBLE}" = '1' ]]; then
-        if [[ -f 'GruntzInstaller' ]]; then
+        if [[ -f "${INSTALLER_NAME}" ]]; then
             echo "> Compressing Installer to save disk space."
-            "${UPX}" -9 'GruntzInstaller'
+            "${UPX}" -9 "${INSTALLER_NAME}"
         fi
     fi
 }
