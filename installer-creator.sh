@@ -285,7 +285,7 @@ BUILD_INSTALLER () {
     COMMAND="${COMMAND} -e eu.murda.gruntz.ddraw"
 
     if [[ "${EXCLUDE_MOVIES}" != 0 ]]; then
-        COMMAND="${COMMAND} -e eu.murda.gruntz.movies"
+        COMMAND="${COMMAND},eu.murda.gruntz.movies"
         INSTALLER_NAME="${INSTALLER_NAME}-no-movie"
     fi
 
