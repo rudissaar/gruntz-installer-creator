@@ -22,6 +22,7 @@ INSTALLER_EXTENSION='.run'
 EXCLUDE_MOVIES=0
 
 CRACK_BINARIES_IF_POSSIBLE=1
+USE_ORIGINAL_CRACK=0
 COMPRESS_INSTALLER_IF_POSSIBLE=1
 
 P7ZIP_FALLBACK=''
@@ -213,31 +214,35 @@ CONVERT_BINARIES () {
             '81C7F648DB99501BED6E1EE71E66E4A0')
                 echo "> Cracking ${EXE_FILE}"
 
-                REPLACE_BYTE "${EXE_FILE}" 0x0001F4CC 0x2E
-                REPLACE_BYTE "${EXE_FILE}" 0x0001F4A1 0xEB
-                REPLACE_BYTE "${EXE_FILE}" 0x0001F4F3 0x90
-                REPLACE_BYTE "${EXE_FILE}" 0x0001F4F4 0x90
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AE86 0x5C
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AE9E 0x5C
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA1 0x52
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA2 0x55
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA3 0x4E
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA4 0x54
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA5 0x5A
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA6 0x2E
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA7 0x45
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA8 0x58
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEA9 0x45
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAA 0x00
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAB 0x00
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAC 0x00
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAD 0x00
-                REPLACE_BYTE "${EXE_FILE}" 0x0020AEAE 0x00
-                REPLACE_BYTE "${EXE_FILE}" 0x0020F4BA 0x5C
-                REPLACE_BYTE "${EXE_FILE}" 0x0020F826 0x5C
-                REPLACE_BYTE "${EXE_FILE}" 0x0020F856 0x5C
-                REPLACE_BYTE "${EXE_FILE}" 0x00212692 0x5C
-                REPLACE_BYTE "${EXE_FILE}" 0x002126AE 0x5C
+                if [[ "${USE_ORIGINAL_CRACK}" = '1' ]]; then
+                    REPLACE_BYTE "${EXE_FILE}" 0x0001F4CC 0x2E
+                    REPLACE_BYTE "${EXE_FILE}" 0x0001F4A1 0xEB
+                    REPLACE_BYTE "${EXE_FILE}" 0x0001F4F3 0x90
+                    REPLACE_BYTE "${EXE_FILE}" 0x0001F4F4 0x90
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AE86 0x5C
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AE9E 0x5C
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA1 0x52
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA2 0x55
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA3 0x4E
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA4 0x54
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA5 0x5A
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA6 0x2E
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA7 0x45
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA8 0x58
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEA9 0x45
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEAA 0x00
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEAB 0x00
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEAC 0x00
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEAD 0x00
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020AEAE 0x00
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020F4BA 0x5C
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020F826 0x5C
+                    REPLACE_BYTE "${EXE_FILE}" 0x0020F856 0x5C
+                    REPLACE_BYTE "${EXE_FILE}" 0x00212692 0x5C
+                    REPLACE_BYTE "${EXE_FILE}" 0x002126AE 0x5C
+                else
+                    REPLACE_BYTE "${EXE_FILE}" 0x0001F15A 0x93
+                fi
                 ;;
         esac
 
@@ -248,31 +253,35 @@ CONVERT_BINARIES () {
             '199D4613E4587E1D720623DC11569E4D')
                 echo "> Cracking ${PATCH_FILE}"
 
-                REPLACE_BYTE "${PATCH_FILE}" 0x0001F4DC 0x2E
-                REPLACE_BYTE "${PATCH_FILE}" 0x0001F4B1 0xEB
-                REPLACE_BYTE "${PATCH_FILE}" 0x0001F503 0x90
-                REPLACE_BYTE "${PATCH_FILE}" 0x0001F504 0x90
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B286 0x5C
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B29E 0x5C
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A1 0x52
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A2 0x55
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A3 0x4E
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A4 0x54
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A5 0x5A
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A6 0x2E
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A7 0x45
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A8 0x58
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A9 0x45
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AA 0x00
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AB 0x00
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AC 0x00
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AD 0x00
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AE 0x00
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020F862 0x5C
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020FBCE 0x5C
-                REPLACE_BYTE "${PATCH_FILE}" 0x0020FBFE 0x5C
-                REPLACE_BYTE "${PATCH_FILE}" 0x002129F2 0x5C
-                REPLACE_BYTE "${PATCH_FILE}" 0x00212A0E 0x5C
+                if [[ "${USE_ORIGINAL_CRACK}" = '1' ]]; then
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0001F4DC 0x2E
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0001F4B1 0xEB
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0001F503 0x90
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0001F504 0x90
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B286 0x5C
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B29E 0x5C
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A1 0x52
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A2 0x55
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A3 0x4E
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A4 0x54
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A5 0x5A
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A6 0x2E
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A7 0x45
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A8 0x58
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2A9 0x45
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AA 0x00
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AB 0x00
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AC 0x00
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AD 0x00
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020B2AE 0x00
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020F862 0x5C
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020FBCE 0x5C
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0020FBFE 0x5C
+                    REPLACE_BYTE "${PATCH_FILE}" 0x002129F2 0x5C
+                    REPLACE_BYTE "${PATCH_FILE}" 0x00212A0E 0x5C
+                else
+                    REPLACE_BYTE "${PATCH_FILE}" 0x0001F16A 0x93
+                fi
                 ;;
         esac
     fi
