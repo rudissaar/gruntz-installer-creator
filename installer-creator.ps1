@@ -30,7 +30,7 @@ $global:InstallerName = 'dist/gruntz-installer'
 $InstallerExtension = '.exe'
 
 $ExcludeMovies = 0
-$UseDgVoodooDdraw = 1
+$UseDgVoodooDdraw = 0
 
 $CrackBinariesIfPossible = 1
 $UseOriginalCrack = 0
@@ -420,10 +420,10 @@ Function Convert-Binaries
     If ($ValidGruntzHashes.Contains($GruntzHash)) {
         Write-Output "> Cracking $GruntzDataOutputDir/GRUNTZ.EXE"
 
-        If ($UseOriginalCrack) {
-            Try {
-                [Byte[]] $Bytes = Get-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+        Try {
+            [Byte[]] $Bytes = Get-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
 
+            If ($UseOriginalCrack) {
                 $Bytes[0x0001F4CC] = 0x2E
                 $Bytes[0x0001F4A1] = 0xEB
                 $Bytes[0x0001F4F3] = 0x90
@@ -449,21 +449,13 @@ Function Convert-Binaries
                 $Bytes[0x0020F856] = 0x5C
                 $Bytes[0x00212692] = 0x5C
                 $Bytes[0x002126AE] = 0x5C
-
-                $Bytes | Set-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
-            } Catch {
-                $_
-            }
-        } Else {
-            Try {
-                [Byte[]] $Bytes = Get-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
-
+            } Else {
                 $Bytes[0x0001F15A] = 0x93
-
-                $Bytes | Set-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
-            } Catch {
-                $_
             }
+
+            $Bytes | Set-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+        } Catch {
+            $_
         }
     }
 
@@ -476,10 +468,10 @@ Function Convert-Binaries
     If ($PatchValidHashes.Contains($PatchHash)) {
         Write-Output "> Cracking $PatchDataOutputDir/GRUNTZ.EXE"
 
-        If ($UseOriginalCrack) {
-            Try {
-                [Byte[]] $Bytes = Get-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+        Try {
+            [Byte[]] $Bytes = Get-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
 
+            If ($UseOriginalCrack) {
                 $Bytes[0x0001F4DC] = 0x2E
                 $Bytes[0x0001F4B1] = 0xEB
                 $Bytes[0x0001F503] = 0x90
@@ -505,21 +497,13 @@ Function Convert-Binaries
                 $Bytes[0x0020FBFE] = 0x5C
                 $Bytes[0x002129F2] = 0x5C
                 $Bytes[0x00212A0E] = 0x5C
-
-                $Bytes | Set-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
-            } Catch {
-                $_
-            }
-        } Else {
-            Try {
-                [Byte[]] $Bytes = Get-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
-
+            } Else {
                 $Bytes[0x0001F16A] = 0x93
-
-                $Bytes | Set-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
-            } Catch {
-                $_
             }
+
+            $Bytes | Set-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+        } Catch {
+            $_
         }
     }
 }
