@@ -30,6 +30,7 @@ $global:InstallerName = 'dist/gruntz-installer'
 $InstallerExtension = '.exe'
 
 $ExcludeMovies = 0
+$UseDgVoodooDdraw = 1
 
 $CrackBinariesIfPossible = 1
 $UseOriginalCrack = 0
@@ -43,6 +44,7 @@ $GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
 $GruntzDataMoviesOutputDir = 'packages/eu.murda.gruntz.movies/data'
 
 $DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data'
+$DgVoodooDdrawOutputDir = 'packages/eu.murda.gruntz.dgvoodoo.ddraw/data'
 $PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data'
 $EditorDataOutputDir = 'packages/eu.murda.gruntz.editor.editor/data'
 $SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/CUSTOM'
@@ -52,6 +54,9 @@ $CustomLevelDirtlandDataOutputDir = 'packages/eu.murda.gruntz.custom.battles.dir
 
 $DdrawDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-ddraw.zip'
 $DdrawArchiveName = 'tmp/' + (Split-Path $DdrawDownloadUrl -Leaf)
+
+$DgVoodooDdrawDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-dgvoodoo-ddraw.zip'
+$DgVoodooDdrawArchiveName = 'tmp/' + (Split-Path $DgVoodooDdrawDownloadUrl -Leaf)
 
 $PatchDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-patch.zip'
 $PatchArchiveName = 'tmp/' + (Split-Path $PatchDownloadUrl -Leaf)
@@ -124,6 +129,8 @@ function Main
     Rename-Files
 
     Import-Ddraw
+    Import-DgVoodooDdraw
+
     Import-Patch
     Import-Editor
     Import-Samples
@@ -299,6 +306,22 @@ Function Import-Ddraw
 
     If (Test-Path -PathType Leaf "$DdrawDataOutputDir/license.txt") {
         Move-Item -Force -Path "$DdrawDataOutputDir/license.txt" -Destination "$DdrawDataOutputDir/ddraw-license.txt"
+    }
+}
+
+Function Import-DgVoodooDdraw
+{
+    If (-Not (Test-Path -PathType Leaf $DgVoodooDdrawArchiveName)) {
+        Try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-WebRequest $DgVoodooDdrawDownloadUrl -OutFile $DgVoodooDdrawArchiveName
+        } Catch {
+            $_
+        }
+    }
+
+    If (Test-Path -PathType Leaf $DgVoodooDdrawArchiveName) {
+        & (Get-7zip) 'x' '-aoa' "-o$DgVoodooDdrawOutputDir" $DgVoodooDdrawArchiveName
     }
 }
 
@@ -511,10 +534,27 @@ Function Build-Installer
         '-p', 'packages'
     )
 
+    $ExcludeString = ''
+
     If ($ExcludeMovies) {
-        $Params += '-e', 'eu.murda.gruntz.movies'
-        Set-Variable -Name 'InstallerName' -Value ("$InstallerName" +'-no-movie') -Scope Global
+        $ExcludeString += 'eu.murda.gruntz.movies'
+
+        Set-Variable -Name 'InstallerName' -Value ("$InstallerName" + '-no-movie') -Scope Global
     }
+
+    If ($ExcludeString) {
+        $ExcludeString += ','
+    }
+
+    If ($UseDgVoodooDdraw) {
+        $ExcludeString += 'eu.murda.gruntz.ddraw'
+
+        Set-Variable -Name 'InstallerName' -Value ("$InstallerName" + '-dgvoodoo') -Scope Global
+    } Else {
+        $ExcludeString += 'eu.murda.gruntz.dgvoodoo.ddraw'
+    }
+
+    $Params += '-e', "$ExcludeString"
 
     Set-Variable -Name 'InstallerName' -Value ("$InstallerName" + $InstallerExtension) -Scope Global
     $Params += "$InstallerName"

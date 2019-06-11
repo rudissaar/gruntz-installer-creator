@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>DgVoodoo DDraw</DisplayName>
+    <Description>dgVoodoo 2.55.4 DirectDraw Wrapper</Description>
+    <Version>2.55.4.1</Version>
+    <ReleaseDate>2019-03-01</ReleaseDate>
+    <Name>eu.murda.gruntz.dgvoodoo.ddraw</Name>
+    <Dependencies>eu.murda.gruntz</Dependencies>
+    <SortingPriority>500</SortingPriority>
+    <Default>true</Default>
+</Package>

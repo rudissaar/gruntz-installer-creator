@@ -291,7 +291,7 @@ BUILD_INSTALLER () {
     echo "> Creating installer."
 
     COMMAND="${BINARYCREATOR} --offline-only -c config/config.xml -p packages"
-    COMMAND="${COMMAND} -e eu.murda.gruntz.ddraw"
+    COMMAND="${COMMAND} -e eu.murda.gruntz.ddraw,eu.murda.gruntz.dgvoodoo.ddraw"
 
     if [[ "${EXCLUDE_MOVIES}" != 0 ]]; then
         COMMAND="${COMMAND},eu.murda.gruntz.movies"
