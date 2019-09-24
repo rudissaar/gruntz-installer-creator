@@ -7,7 +7,7 @@
 
   This scripts tries to convert Gruntz ISO file to installer that is compatible with Microsoft Windows 7, 8, 8.1 and 10.
 
-  Requirements:
+ .REQUIREMENTS
   - Windows PowerShell 4.0 or higher.
   - Qt Installer Framework 3.0 or higher
   - 7-Zip

@@ -6,7 +6,7 @@
 # DESCRIPTION
 # This scripts tries to convert Gruntz ISO file to installer that is compatible with UNIX-like opertaing system.
 
-# Requirements:
+# REQUIREMENTS
 # - wget
 # - p7zip
 # - Qt Installer Framework 3.0 or higher
