@@ -4,7 +4,7 @@
 # Runs tasks to generate Monolith's Gruntz (1999) installer for UNIX-like opertaing system.
 
 # DESCRIPTION
-# This scripts tries to convert Gruntz ISO file to installer that is compatible with UNIX-like opertaing system.
+# This scripts tries to convert Gruntz ISO file to an installer that is compatible with UNIX-like opertaing system.
 
 # REQUIREMENTS
 # - wget
@@ -363,7 +363,7 @@ if [[ "${?}" != '0' ]]; then
     else
         if [[ "${COMPRESS_INSTALLER_IF_POSSIBLE}" = '1' ]]; then
             echo "> Unable to find upx from your environment's PATH variable."
-            echo '> Compressing installer will be skipped.'
+            echo '> Compressing the installer will be skipped.'
         fi
 
         COMPRESS_INSTALLER_IF_POSSIBLE=0

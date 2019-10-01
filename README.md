@@ -3,7 +3,7 @@
 Bundle of tasks to generate Monolith's [Gruntz](https://en.wikipedia.org/wiki/Gruntz) (1999)
 installer for modern operating systems.
 
-This project enables you to convert Gruntz ISO files to installer that is compatible with Microsoft Windows 7, 8, 8.1, 10 and UNIX-like systems.
+This project enables you to convert Gruntz ISO files into an installer that is compatible with Microsoft Windows 7, 8, 8.1, 10 and UNIX-like systems.
 
 ![Gruntz Installer Screenshot](https://img.murda.eu/gr/gruntz-installer.png)
 
