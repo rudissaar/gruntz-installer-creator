@@ -24,3 +24,8 @@ This project enables you to convert Gruntz ISO files to installer that is compat
 ## Approved ISO Hashes (MD5)
 
 275547756A472DA85298F7B86FBAF197
+
+## Getting Help
+
+You can find help for Gruntz related problems from Discord:
+https://discordapp.com/invite/TUpMYb9
