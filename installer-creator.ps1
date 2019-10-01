@@ -5,7 +5,7 @@
 
  .DESCRIPTION
 
-  This scripts tries to convert Gruntz ISO file to installer that is compatible with Microsoft Windows 7, 8, 8.1 and 10.
+  This scripts tries to convert Gruntz ISO file to an installer that is compatible with Microsoft Windows 7, 8, 8.1 and 10.
 
  .REQUIREMENTS
   - Windows PowerShell 4.0 or higher.
@@ -107,7 +107,7 @@ function Main
         }
 
         If ((Test-Media $Media) -Eq 2) {
-            Write-Output "> Specified ISO file doesn't match with required fingerprint."
+            Write-Output "> Specified ISO file doesn't match with the required fingerprint."
         }
 
         Write-Output '> Aborting.'
@@ -179,7 +179,7 @@ Function Get-Upx
         } Else {
             If ($CompressInstallerIfPossible) {
                 Write-Output "> Unable to find upx.exe from your environment's PATH variable."
-                echo '> Compressing installer will be skipped.'
+                echo '> Compressing the installer will be skipped.'
             }
         }
     }
@@ -550,7 +550,7 @@ Function Compress-Installer
 {
     If ($CompressInstallerIfPossible -And (-Not ((Get-Upx) -Eq 1))) {
         If (Test-Path -PathType Leaf "$InstallerName") {
-            Write-Output "> Compressing Installer to save disk space."
+            Write-Output "> Compressing the installer to save disk space."
             & (Get-Upx) '-9' "$InstallerName"
         }
     }
