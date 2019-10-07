@@ -41,15 +41,15 @@ if [[ ! -z "${1}" ]]; then
 fi
 
 GRUNTZ_DATA_OUTPUT_DIR="${RELATIVE_PATH}/packages/eu.murda.gruntz/data"
-GRUNTZ_DATA_MOVIES_OUTPUT_DIR='${RELATIVE_PATH}/packages/eu.murda.gruntz.movies/data'
+GRUNTZ_DATA_MOVIES_OUTPUT_DIR="${RELATIVE_PATH}/packages/eu.murda.gruntz.movies/data"
 
-PATCH_DATA_OUTPUT_DIR='${RELATIVE_PATH}/packages/eu.murda.gruntz.patch/data'
+PATCH_DATA_OUTPUT_DIR="${RELATIVE_PATH}/packages/eu.murda.gruntz.patch/data"
 
-EDITOR_DATA_OUTPUT_DIR='${RELATIVE_PATH}/packages/eu.murda.gruntz.editor.editor/data'
-SAMPLES_DATA_OUTPUT_DIR='${RELATIVE_PATH}/packages/eu.murda.gruntz.editor.samples/data/CUSTOM'
+EDITOR_DATA_OUTPUT_DIR="${RELATIVE_PATH}/packages/eu.murda.gruntz.editor.editor/data"
+SAMPLES_DATA_OUTPUT_DIR="${RELATIVE_PATH}/packages/eu.murda.gruntz.editor.samples/data/CUSTOM"
 
-CUSTOM_LEVEL_FORKLAND_DATA_OUTPUT_DIR='${RELATIVE_PATH}/packages/eu.murda.gruntz.custom.battles.forkland/data/CUSTOM'
-CUSTOM_LEVEL_DIRTLAND_DATA_OUTPUT_DIR='${RELATIVE_PATH}/packages/eu.murda.gruntz.custom.battles.dirtland/data/CUSTOM'
+CUSTOM_LEVEL_FORKLAND_DATA_OUTPUT_DIR="${RELATIVE_PATH}/packages/eu.murda.gruntz.custom.battles.forkland/data/CUSTOM"
+CUSTOM_LEVEL_DIRTLAND_DATA_OUTPUT_DIR="${RELATIVE_PATH}/packages/eu.murda.gruntz.custom.battles.dirtland/data/CUSTOM"
 
 PATCH_DOWNLOAD_URL='http://legacy.murda.eu/downloads/gruntz/gruntz-patch.zip'
 PATCH_ARCHIVE_NAME="${RELATIVE_PATH}/tmp/$(basename ${PATCH_DOWNLOAD_URL})"
@@ -407,3 +407,4 @@ IMPORT_CUSTOM_LEVEL_DIRTLAND
 CONVERT_BINARIES
 BUILD_INSTALLER
 COMPRESS_INSTALLER
+
