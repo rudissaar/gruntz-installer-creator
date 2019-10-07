@@ -27,6 +27,7 @@ CRACK_BINARIES_IF_POSSIBLE=1
 USE_ORIGINAL_CRACK=0
 COMPRESS_INSTALLER_IF_POSSIBLE=1
 
+WGET_FALLBACK=''
 P7ZIP_FALLBACK=''
 BINARYCREATOR_FALLBACK=''
 UPX_FALLBACK=''
@@ -155,7 +156,7 @@ MOVE_MOVIES_TO_SEPARATE_PACKAGE () {
 
 IMPORT_PATCH () {
     if [[ ! -f "${PATCH_ARCHIVE_NAME}" ]]; then
-        wget "${PATCH_DOWNLOAD_URL}" -O "${PATCH_ARCHIVE_NAME}"
+        "${WGET}" "${PATCH_DOWNLOAD_URL}" -O "${PATCH_ARCHIVE_NAME}"
     fi
 
     if [[ -f "${PATCH_ARCHIVE_NAME}" ]]; then
@@ -165,7 +166,7 @@ IMPORT_PATCH () {
 
 IMPORT_EDITOR () {
     if [[ ! -f "${EDITOR_ARCHIVE_NAME}" ]]; then
-        wget "${EDITOR_DOWNLOAD_URL}" -O "${EDITOR_ARCHIVE_NAME}"
+        "${WGET}" "${EDITOR_DOWNLOAD_URL}" -O "${EDITOR_ARCHIVE_NAME}"
     fi
 
     if [[ -f "${EDITOR_ARCHIVE_NAME}" ]]; then
@@ -175,7 +176,7 @@ IMPORT_EDITOR () {
 
 IMPORT_SAMPLES () {
     if [[ ! -f "${SAMPLES_ARCHIVE_NAME}" ]]; then
-        wget "${SAMPLES_DOWNLOAD_URL}" -O "${SAMPLES_ARCHIVE_NAME}"
+        "${WGET}" "${SAMPLES_DOWNLOAD_URL}" -O "${SAMPLES_ARCHIVE_NAME}"
     fi
 
     if [[ -f "${SAMPLES_ARCHIVE_NAME}" ]]; then
@@ -185,7 +186,7 @@ IMPORT_SAMPLES () {
 
 IMPORT_CUSTOM_LEVEL_FORKLAND () {
     if [[ ! -f "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}" ]]; then
-        wget "${CUSTOM_LEVEL_FORKLAND_DOWNLOAD_URL}" -O "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}"
+        "${WGET}" "${CUSTOM_LEVEL_FORKLAND_DOWNLOAD_URL}" -O "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}"
     fi
 
     if [[ -f "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}" ]]; then
@@ -195,7 +196,7 @@ IMPORT_CUSTOM_LEVEL_FORKLAND () {
 
 IMPORT_CUSTOM_LEVEL_DIRTLAND () {
     if [[ ! -f "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}" ]]; then
-        wget "${CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL}" -O "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}"
+        "${WGET}" "${CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL}" -O "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}"
     fi
 
     if [[ -f "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}" ]]; then
@@ -313,6 +314,20 @@ COMPRESS_INSTALLER () {
         fi
     fi
 }
+
+which wget 1> /dev/null 2>&1
+
+if [[ "${?}" != '0' ]]; then
+    if [[ ! -z "${WGET_FALLBACK}" ]]; then
+        WGET="${WGET_FALLBACK}"
+    else
+        echo "> Unable to find wget from your environment's PATH variable."
+        echo '> Aborting.'
+        exit 1
+    fi
+else
+    WGET="$(which wget)"
+fi
 
 which 7z 1> /dev/null 2>&1
 
