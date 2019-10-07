@@ -16,7 +16,9 @@
 # - Path to Gruntz ISO file.
 # - Default, gruntz.iso
 
-INSTALLER_NAME='dist/gruntz-installer'
+RELATIVE_PATH=$(dirname ${0})
+
+INSTALLER_NAME="${RELATIVE_PATH}/dist/gruntz-installer"
 INSTALLER_EXTENSION='.run'
 
 # Gruntz seems to be failing to play movie (MOVIEZ/*.FEC) files on Linux platform with wine software,
@@ -32,7 +34,6 @@ P7ZIP_FALLBACK=''
 BINARYCREATOR_FALLBACK=''
 UPX_FALLBACK=''
 
-RELATIVE_PATH=$(dirname ${0})
 MEDIA="${RELATIVE_PATH}/gruntz.iso"
 
 if [[ ! -z "${1}" ]]; then
@@ -293,7 +294,8 @@ CONVERT_BINARIES () {
 BUILD_INSTALLER () {
     echo "> Creating installer."
 
-    COMMAND="${BINARYCREATOR} --offline-only -c config/config.xml -p packages"
+    COMMAND="${BINARYCREATOR} --offline-only"
+    COMMAND="${COMMAND} -c ${RELATIVE_PATH}/config/config.xml -p ${RELATIVE_PATH}/packages"
     COMMAND="${COMMAND} -e eu.murda.gruntz.ddraw,eu.murda.gruntz.dgvoodoo.ddraw"
 
     if [[ "${EXCLUDE_MOVIES}" != 0 ]]; then
