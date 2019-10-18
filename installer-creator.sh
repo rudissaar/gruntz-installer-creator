@@ -13,7 +13,7 @@
 # - UPX (Optional)
 
 # PARAMETER Iso (${1})
-# - Path to Gruntz ISO file.
+# - Path to Gruntz ISO file
 # - Default, gruntz.iso
 
 RELATIVE_PATH=$(dirname ${0})
@@ -67,7 +67,7 @@ CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL='http://legacy.murda.eu/downloads/gruntz/grun
 CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME="${RELATIVE_PATH}/tmp/$(basename ${CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL})"
 
 TEST_MEDIA () {
-    if [[ ! -f "${MEDIA}" ]]; then
+    if [ ! -f "${MEDIA}" ]; then
         echo "> Specified ISO file doesn't exist on your filesystem."
         echo '> Aborting.'
         exit 1
@@ -80,13 +80,13 @@ TEST_MEDIA () {
     do
         MEDIA_HASH="$(md5sum ${MEDIA} | cut -d ' ' -f 1)"
 
-        if [[ "${VALID_HASH}" = "${MEDIA_HASH^^}" ]]; then
+        if [ "${VALID_HASH}" = "${MEDIA_HASH^^}" ]; then
             VALID_HASH_FOUND=1
             break
         fi
     done
 
-    if [[ "${VALID_HASH_FOUND}" != '1' ]]; then
+    if [ "${VALID_HASH_FOUND}" != '1' ]; then
         echo "> Specified ISO file doesn't match with required fingerprint."
         echo '> Aborting.'
         exit 1
@@ -105,7 +105,7 @@ EXPAND_MEDIA () {
 }
 
 MERGE_SUBDIRECTORY_TO_ROOT () {
-    if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${1}" ]]; then
+    if [ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${1}" ]; then
         mv "${GRUNTZ_DATA_OUTPUT_DIR}/${1}/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
         rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/${1}"
     fi
@@ -133,74 +133,74 @@ REMOVE_USELESS_FILES () {
         'REDIST' \
         'SYSTEM'
     do
-        if [[ -f "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}" ]]; then
+        if [ -f "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}" ]; then
             rm "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}"
         fi
 
-        if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}" ]]; then
+        if [ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}" ]; then
             rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}"
         fi
     done
 }
 
 RENAME_FILES () {
-    if [[ -f "${GRUNTZ_DATA_OUTPUT_DIR}/AUTORUN.ICO" ]]; then
+    if [ -f "${GRUNTZ_DATA_OUTPUT_DIR}/AUTORUN.ICO" ]; then
         mv "${GRUNTZ_DATA_OUTPUT_DIR}/AUTORUN.ICO" "${GRUNTZ_DATA_OUTPUT_DIR}/GRUNTZ.ICO"
     fi
 }
 
 MOVE_MOVIES_TO_SEPARATE_PACKAGE () {
-    if [[ -d "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" ]]; then
+    if [ -d "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" ]; then
         mv "${GRUNTZ_DATA_OUTPUT_DIR}/MOVIEZ" "${GRUNTZ_DATA_MOVIES_OUTPUT_DIR}"
     fi
 }
 
 IMPORT_PATCH () {
-    if [[ ! -f "${PATCH_ARCHIVE_NAME}" ]]; then
+    if [ ! -f "${PATCH_ARCHIVE_NAME}" ]; then
         "${WGET}" "${PATCH_DOWNLOAD_URL}" -O "${PATCH_ARCHIVE_NAME}"
     fi
 
-    if [[ -f "${PATCH_ARCHIVE_NAME}" ]]; then
+    if [ -f "${PATCH_ARCHIVE_NAME}" ]; then
         "${P7ZIP}" x -aoa "-o${PATCH_DATA_OUTPUT_DIR}" "${PATCH_ARCHIVE_NAME}"
     fi
 }
 
 IMPORT_EDITOR () {
-    if [[ ! -f "${EDITOR_ARCHIVE_NAME}" ]]; then
+    if [ ! -f "${EDITOR_ARCHIVE_NAME}" ]; then
         "${WGET}" "${EDITOR_DOWNLOAD_URL}" -O "${EDITOR_ARCHIVE_NAME}"
     fi
 
-    if [[ -f "${EDITOR_ARCHIVE_NAME}" ]]; then
+    if [ -f "${EDITOR_ARCHIVE_NAME}" ]; then
         "${P7ZIP}" x -aoa "-o${EDITOR_DATA_OUTPUT_DIR}" "${EDITOR_ARCHIVE_NAME}"
     fi
 }
 
 IMPORT_SAMPLES () {
-    if [[ ! -f "${SAMPLES_ARCHIVE_NAME}" ]]; then
+    if [ ! -f "${SAMPLES_ARCHIVE_NAME}" ]; then
         "${WGET}" "${SAMPLES_DOWNLOAD_URL}" -O "${SAMPLES_ARCHIVE_NAME}"
     fi
 
-    if [[ -f "${SAMPLES_ARCHIVE_NAME}" ]]; then
+    if [ -f "${SAMPLES_ARCHIVE_NAME}" ]; then
         "${P7ZIP}" x -aoa "-o${SAMPLES_DATA_OUTPUT_DIR}" "${SAMPLES_ARCHIVE_NAME}"
     fi
 }
 
 IMPORT_CUSTOM_LEVEL_FORKLAND () {
-    if [[ ! -f "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}" ]]; then
+    if [ ! -f "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}" ]; then
         "${WGET}" "${CUSTOM_LEVEL_FORKLAND_DOWNLOAD_URL}" -O "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}"
     fi
 
-    if [[ -f "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}" ]]; then
+    if [ -f "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}" ]; then
         "${P7ZIP}" x -aoa "-o${CUSTOM_LEVEL_FORKLAND_DATA_OUTPUT_DIR}" "${CUSTOM_LEVEL_FORKLAND_ARCHIVE_NAME}"
     fi
 }
 
 IMPORT_CUSTOM_LEVEL_DIRTLAND () {
-    if [[ ! -f "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}" ]]; then
+    if [ ! -f "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}" ]; then
         "${WGET}" "${CUSTOM_LEVEL_DIRTLAND_DOWNLOAD_URL}" -O "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}"
     fi
 
-    if [[ -f "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}" ]]; then
+    if [ -f "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}" ]; then
         "${P7ZIP}" x -aoa "-o${CUSTOM_LEVEL_DIRTLAND_DATA_OUTPUT_DIR}" "${CUSTOM_LEVEL_DIRTLAND_ARCHIVE_NAME}"
     fi
 }
@@ -210,7 +210,7 @@ REPLACE_BYTE () {
 }
 
 CONVERT_BINARIES () {
-    if [[ "${CRACK_BINARIES_IF_POSSIBLE}" = '1' ]]; then
+    if [ "${CRACK_BINARIES_IF_POSSIBLE}" = '1' ]; then
         EXE_FILE="${GRUNTZ_DATA_OUTPUT_DIR}/GRUNTZ.EXE"
         EXE_HASH="$(md5sum ${EXE_FILE} | cut -d ' ' -f 1)"
 
@@ -218,7 +218,7 @@ CONVERT_BINARIES () {
             '81C7F648DB99501BED6E1EE71E66E4A0')
                 echo "> Cracking ${EXE_FILE}"
 
-                if [[ "${USE_ORIGINAL_CRACK}" = '1' ]]; then
+                if [ "${USE_ORIGINAL_CRACK}" = '1' ]; then
                     REPLACE_BYTE "${EXE_FILE}" 0x0001F4CC 0x2E
                     REPLACE_BYTE "${EXE_FILE}" 0x0001F4A1 0xEB
                     REPLACE_BYTE "${EXE_FILE}" 0x0001F4F3 0x90
@@ -257,7 +257,7 @@ CONVERT_BINARIES () {
             '199D4613E4587E1D720623DC11569E4D')
                 echo "> Cracking ${PATCH_FILE}"
 
-                if [[ "${USE_ORIGINAL_CRACK}" = '1' ]]; then
+                if [ "${USE_ORIGINAL_CRACK}" = '1' ]; then
                     REPLACE_BYTE "${PATCH_FILE}" 0x0001F4DC 0x2E
                     REPLACE_BYTE "${PATCH_FILE}" 0x0001F4B1 0xEB
                     REPLACE_BYTE "${PATCH_FILE}" 0x0001F503 0x90
@@ -298,7 +298,7 @@ BUILD_INSTALLER () {
     COMMAND="${COMMAND} -c ${RELATIVE_PATH}/config/config.xml -p ${RELATIVE_PATH}/packages"
     COMMAND="${COMMAND} -e eu.murda.gruntz.ddraw,eu.murda.gruntz.dgvoodoo.ddraw"
 
-    if [[ "${EXCLUDE_MOVIES}" != 0 ]]; then
+    if [ "${EXCLUDE_MOVIES}" != 0 ]; then
         COMMAND="${COMMAND},eu.murda.gruntz.movies"
         INSTALLER_NAME="${INSTALLER_NAME}-no-movie"
     fi
@@ -309,8 +309,8 @@ BUILD_INSTALLER () {
 }
 
 COMPRESS_INSTALLER () {
-    if [[ "${COMPRESS_INSTALLER_IF_POSSIBLE}" = '1' ]]; then
-        if [[ -f "${INSTALLER_NAME}" ]]; then
+    if [ "${COMPRESS_INSTALLER_IF_POSSIBLE}" = '1' ]; then
+        if [ -f "${INSTALLER_NAME}" ]; then
             echo "> Compressing Installer to save disk space."
             "${UPX}" -9 "${INSTALLER_NAME}"
         fi
@@ -319,8 +319,8 @@ COMPRESS_INSTALLER () {
 
 which wget 1> /dev/null 2>&1
 
-if [[ "${?}" != '0' ]]; then
-    if [[ ! -z "${WGET_FALLBACK}" ]]; then
+if [ "${?}" != '0' ]; then
+    if [ ! -z "${WGET_FALLBACK}" ]; then
         WGET="${WGET_FALLBACK}"
     else
         echo "> Unable to find wget from your environment's PATH variable."
@@ -333,8 +333,8 @@ fi
 
 which 7z 1> /dev/null 2>&1
 
-if [[ "${?}" != '0' ]]; then
-    if [[ ! -z "${P7ZIP_FALLBACK}" ]]; then
+if [ "${?}" != '0' ]; then
+    if [ ! -z "${P7ZIP_FALLBACK}" ]; then
         P7ZIP="${P7ZIP_FALLBACK}"
     else
         echo "> Unable to find 7z from your environment's PATH variable."
@@ -349,7 +349,7 @@ echo "> 7z binary found at: '${P7ZIP}'"
 
 which 7z 1> /dev/null 2>&1
 
-if [[ "${?}" != '0' ]]; then
+if [ "${?}" != '0' ]; then
     echo "> Unable to find 7z from your environment's PATH variable."
     echo '> Aborting.'
     exit 1
@@ -357,8 +357,8 @@ fi
 
 which binarycreator 1> /dev/null 2>&1
 
-if [[ "${?}" != '0' ]]; then
-    if [[ ! -z "${BINARYCREATOR_FALLBACK}" ]]; then
+if [ "${?}" != '0' ]; then
+    if [ ! -z "${BINARYCREATOR_FALLBACK}" ]; then
         BINARYCREATOR="${BINARYCREATOR_FALLBACK_FALLBACK}"
     else
         echo "> Unable to find binarycreator from your environment's PATH variable."
@@ -373,12 +373,12 @@ echo "> BinaryCreator binary found at: '${BINARYCREATOR}'"
 
 which upx 1> /dev/null 2>&1
 
-if [[ "${?}" != '0' ]]; then
-    if [[ ! -z "${UPX_FALLBACK}" ]]; then
+if [ "${?}" != '0' ]; then
+    if [ ! -z "${UPX_FALLBACK}" ]; then
         UPX="${UPX_FALLBACK}"
         echo "> UPX binary found at: '${UPX}'"
     else
-        if [[ "${COMPRESS_INSTALLER_IF_POSSIBLE}" = '1' ]]; then
+        if [ "${COMPRESS_INSTALLER_IF_POSSIBLE}" = '1' ]; then
             echo "> Unable to find upx from your environment's PATH variable."
             echo '> Compressing the installer will be skipped.'
         fi
@@ -407,4 +407,5 @@ IMPORT_CUSTOM_LEVEL_DIRTLAND
 CONVERT_BINARIES
 BUILD_INSTALLER
 COMPRESS_INSTALLER
+CLEAR_DATA_OUTPUT_DIRS
 
