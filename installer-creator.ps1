@@ -8,7 +8,7 @@
   This scripts tries to convert Gruntz ISO file to an installer that is compatible with Microsoft Windows 7, 8, 8.1 and 10.
 
  .REQUIREMENTS
-  - Windows PowerShell 4.0 or higher.
+  - Windows PowerShell 4.0 or higher
   - Qt Installer Framework 3.0 or higher
   - 7-Zip
   - UPX (Optional)
@@ -21,12 +21,12 @@
 
 [CmdletBinding()]
 Param(
-    $Media = 'gruntz.iso'
+    $Media = "${PSScriptRoot}\gruntz.iso"
 )
 
 Set-StrictMode -Version 3
 
-$global:InstallerName = 'dist/gruntz-installer'
+$global:InstallerName = "${PSScriptRoot}\dist\gruntz-installer"
 $InstallerExtension = '.exe'
 
 $ExcludeMovies = 0
@@ -40,38 +40,38 @@ $7zipFallback = ''
 $BinaryCreatorFallback = ''
 $UpxFallback = ''
 
-$GruntzDataOutputDir = 'packages/eu.murda.gruntz/data'
-$GruntzDataMoviesOutputDir = 'packages/eu.murda.gruntz.movies/data'
+$GruntzDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz\data"
+$GruntzDataMoviesOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.movies\data"
 
-$DdrawDataOutputDir = 'packages/eu.murda.gruntz.ddraw/data'
-$DgVoodooDdrawOutputDir = 'packages/eu.murda.gruntz.dgvoodoo.ddraw/data'
-$PatchDataOutputDir = 'packages/eu.murda.gruntz.patch/data'
-$EditorDataOutputDir = 'packages/eu.murda.gruntz.editor.editor/data'
-$SamplesDataOutputDir = 'packages/eu.murda.gruntz.editor.samples/data/CUSTOM'
+$DdrawDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.ddraw\data"
+$DgVoodooDdrawOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.dgvoodoo.ddraw\data"
+$PatchDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.patch\data"
+$EditorDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.editor.editor\data"
+$SamplesDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.editor.samples\data\CUSTOM"
 
-$CustomLevelForklandDataOutputDir = 'packages/eu.murda.gruntz.custom.battles.forkland/data/CUSTOM'
-$CustomLevelDirtlandDataOutputDir = 'packages/eu.murda.gruntz.custom.battles.dirtland/data/CUSTOM'
+$CustomLevelForklandDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.custom.battles.forkland\data\CUSTOM"
+$CustomLevelDirtlandDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.custom.battles.dirtland\data\CUSTOM"
 
 $DdrawDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-ddraw.zip'
-$DdrawArchiveName = 'tmp/' + (Split-Path $DdrawDownloadUrl -Leaf)
+$DdrawArchiveName = "${PSScriptRoot}\tmp\" + (Split-Path $DdrawDownloadUrl -Leaf)
 
 $DgVoodooDdrawDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-dgvoodoo-ddraw.zip'
-$DgVoodooDdrawArchiveName = 'tmp/' + (Split-Path $DgVoodooDdrawDownloadUrl -Leaf)
+$DgVoodooDdrawArchiveName = "${PSScriptRoot}\tmp\" + (Split-Path $DgVoodooDdrawDownloadUrl -Leaf)
 
 $PatchDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-patch.zip'
-$PatchArchiveName = 'tmp/' + (Split-Path $PatchDownloadUrl -Leaf)
+$PatchArchiveName = "${PSScriptRoot}\tmp\" + (Split-Path $PatchDownloadUrl -Leaf)
 
 $EditorDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-editor.zip'
-$EditorArchiveName = 'tmp/' + (Split-Path $EditorDownloadUrl -Leaf)
+$EditorArchiveName = "${PSScriptRoot}\tmp\" + (Split-Path $EditorDownloadUrl -Leaf)
 
 $SamplesDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-sample-levels.zip'
-$SamplesArchiveName = 'tmp/' + (Split-Path $SamplesDownloadUrl -Leaf)
+$SamplesArchiveName = "${PSScriptRoot}\tmp\" + (Split-Path $SamplesDownloadUrl -Leaf)
 
 $CustomLevelForklandDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-forkland.zip'
-$CustomLevelForklandArchiveName = 'tmp/' + (Split-Path $CustomLevelForklandDownloadUrl -Leaf)
+$CustomLevelForklandArchiveName = "${PSScriptRoot}\tmp\" + (Split-Path $CustomLevelForklandDownloadUrl -Leaf)
 
 $CustomLevelDirtlandDownloadUrl = 'http://legacy.murda.eu/downloads/gruntz/gruntz-battlez-dirtland.zip'
-$CustomLevelDirtlandArchiveName = 'tmp/' + (Split-Path $CustomLevelDirtlandDownloadUrl -Leaf)
+$CustomLevelDirtlandArchiveName = "${PSScriptRoot}\tmp\" + (Split-Path $CustomLevelDirtlandDownloadUrl -Leaf)
 
 $DirectoriesToMergeIntoRoot = @(
     'GAME',
@@ -79,7 +79,7 @@ $DirectoriesToMergeIntoRoot = @(
     'FONTS'
 )
 
-function Main
+Function Main
 {
     If ((Get-7zip) -Eq 1) {
         Write-Output "> Unable to find 7z.exe from your environment's PATH variable."
@@ -199,7 +199,7 @@ Function Create-Directory ([string] $Directory)
 
 Function Clear-DataOutputDirs
 {
-    $DataOutputDirs = (Get-ChildItem -Path 'packages' -Filter 'data' -Recurse -Directory).Fullname
+    $DataOutputDirs = (Get-ChildItem -Path "${PSScriptRoot}\packages" -Filter 'data' -Recurse -Directory).Fullname
 
     Foreach ($DataOutputDir In $DataOutputDirs) {
         If (Test-Path -PathType Any $DataOutputDir) {
@@ -233,12 +233,12 @@ Function Expand-Media ([string] $Media)
 
     Copy-Item -Force 'compatibility.bat' -Destination $GruntzDataOutputDir
 
-    If (Test-Path -PathType Container "$GruntzDataOutputDir/MOVIEZ") {
-        Move-Item -Force -Path "$GruntzDataOutputDir/MOVIEZ" -Destination $GruntzDataMoviesOutputDir
+    If (Test-Path -PathType Container "$GruntzDataOutputDir\MOVIEZ") {
+        Move-Item -Force -Path "$GruntzDataOutputDir\MOVIEZ" -Destination $GruntzDataMoviesOutputDir
     }
 
     Foreach ($DirectoryToMerge In $DirectoriesToMergeIntoRoot) {
-        $DirectoryPath = "$GruntzDataOutputDir/$DirectoryToMerge"
+        $DirectoryPath = "$GruntzDataOutputDir\$DirectoryToMerge"
 
         If (Test-Path -PathType Container $DirectoryPath) {
             Get-ChildItem -Path $DirectoryPath -Recurse | Move-Item -Force -Destination $GruntzDataOutputDir
@@ -274,7 +274,7 @@ Function Remove-UselessFiles
     $UselessFiles += $DirectoriesToMergeIntoRoot
 
     Foreach ($UselessFile In $UselessFiles) {
-        $UselessFilePath = "$GruntzDataOutputDir/$UselessFile"
+        $UselessFilePath = "$GruntzDataOutputDir\$UselessFile"
 
         If (Test-Path -PathType Any $UselessFilePath) {
             Remove-Item -Recurse -Force $UselessFilePath
@@ -284,8 +284,8 @@ Function Remove-UselessFiles
 
 Function Rename-Files
 {
-    If (Test-Path -PathType Leaf "$GruntzDataOutputDir/AUTORUN.ICO") {
-        Move-Item -Force -Path "$GruntzDataOutputDir/AUTORUN.ICO" -Destination "$GruntzDataOutputDir/GRUNTZ.ICO"
+    If (Test-Path -PathType Leaf "$GruntzDataOutputDir\AUTORUN.ICO") {
+        Move-Item -Force -Path "$GruntzDataOutputDir\AUTORUN.ICO" -Destination "$GruntzDataOutputDir\GRUNTZ.ICO"
     }
 }
 
@@ -304,8 +304,8 @@ Function Import-Ddraw
         & (Get-7zip) 'x' '-aoa' "-o$DdrawDataOutputDir" $DdrawArchiveName
     }
 
-    If (Test-Path -PathType Leaf "$DdrawDataOutputDir/license.txt") {
-        Move-Item -Force -Path "$DdrawDataOutputDir/license.txt" -Destination "$DdrawDataOutputDir/ddraw-license.txt"
+    If (Test-Path -PathType Leaf "$DdrawDataOutputDir\license.txt") {
+        Move-Item -Force -Path "$DdrawDataOutputDir\license.txt" -Destination "$DdrawDataOutputDir\ddraw-license.txt"
     }
 }
 
@@ -415,13 +415,13 @@ Function Convert-Binaries
         '81C7F648DB99501BED6E1EE71E66E4A0'
     )
 
-    $GruntzHash = Get-FileHash -Algorithm MD5 "$GruntzDataOutputDir/GRUNTZ.EXE" | Select -ExpandProperty Hash
+    $GruntzHash = Get-FileHash -Algorithm MD5 "$GruntzDataOutputDir\GRUNTZ.EXE" | Select -ExpandProperty Hash
 
     If ($ValidGruntzHashes.Contains($GruntzHash)) {
-        Write-Output "> Cracking $GruntzDataOutputDir/GRUNTZ.EXE"
+        Write-Output "> Cracking $GruntzDataOutputDir\GRUNTZ.EXE"
 
         Try {
-            [Byte[]] $Bytes = Get-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+            [Byte[]] $Bytes = Get-Content "$GruntzDataOutputDir\GRUNTZ.EXE" -Encoding Byte
 
             If ($UseOriginalCrack) {
                 $Bytes[0x0001F4CC] = 0x2E
@@ -453,7 +453,7 @@ Function Convert-Binaries
                 $Bytes[0x0001F15A] = 0x93
             }
 
-            $Bytes | Set-Content "$GruntzDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+            $Bytes | Set-Content "$GruntzDataOutputDir\GRUNTZ.EXE" -Encoding Byte
         } Catch {
             $_
         }
@@ -463,13 +463,13 @@ Function Convert-Binaries
         '199D4613E4587E1D720623DC11569E4D'
     )
 
-    $PatchHash = Get-FileHash -Algorithm MD5 "$PatchDataOutputDir/GRUNTZ.EXE" | Select -ExpandProperty Hash
+    $PatchHash = Get-FileHash -Algorithm MD5 "$PatchDataOutputDir\GRUNTZ.EXE" | Select -ExpandProperty Hash
 
     If ($PatchValidHashes.Contains($PatchHash)) {
-        Write-Output "> Cracking $PatchDataOutputDir/GRUNTZ.EXE"
+        Write-Output "> Cracking $PatchDataOutputDir\GRUNTZ.EXE"
 
         Try {
-            [Byte[]] $Bytes = Get-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+            [Byte[]] $Bytes = Get-Content "$PatchDataOutputDir\GRUNTZ.EXE" -Encoding Byte
 
             If ($UseOriginalCrack) {
                 $Bytes[0x0001F4DC] = 0x2E
@@ -501,7 +501,7 @@ Function Convert-Binaries
                 $Bytes[0x0001F16A] = 0x93
             }
 
-            $Bytes | Set-Content "$PatchDataOutputDir/GRUNTZ.EXE" -Encoding Byte
+            $Bytes | Set-Content "$PatchDataOutputDir\GRUNTZ.EXE" -Encoding Byte
         } Catch {
             $_
         }
@@ -514,8 +514,8 @@ Function Build-Installer
 
     $Params = @(
         '--offline-only',
-        '-c', 'config/config.xml',
-        '-p', 'packages'
+        '-c', "${PSScriptRoot}\config\config.xml",
+        '-p', "${PSScriptRoot}\packages"
     )
 
     $ExcludeString = ''
