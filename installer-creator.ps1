@@ -117,11 +117,11 @@ Function Main
     Clear-DataOutputDirs
 
     If ((Create-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
-        Write-Output "> Created directory: '$GruntzDataOutputDir'."
+        Write-Output "> Created directory: '${GruntzDataOutputDir}'."
     }
 
     If ((Create-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
-        Write-Output "> Created directory: '$GruntzDataMoviesOutputDir'."
+        Write-Output "> Created directory: '${GruntzDataMoviesOutputDir}'."
     }
 
     Expand-Media $Media
@@ -141,6 +141,8 @@ Function Main
     Convert-Binaries
     Build-Installer
     Compress-Installer
+	
+	Clear-DataOutputDirs
 }
 
 Function Get-7zip
@@ -229,16 +231,16 @@ Function Test-Media ([string] $Path)
 
 Function Expand-Media ([string] $Media)
 {
-    & (Get-7zip) 'x' '-aoa' "-o$GruntzDataOutputDir" $Media
+    & (Get-7zip) 'x' '-aoa' "-o${GruntzDataOutputDir}" $Media
 
     Copy-Item -Force 'compatibility.bat' -Destination $GruntzDataOutputDir
 
-    If (Test-Path -PathType Container "$GruntzDataOutputDir\MOVIEZ") {
-        Move-Item -Force -Path "$GruntzDataOutputDir\MOVIEZ" -Destination $GruntzDataMoviesOutputDir
+    If (Test-Path -PathType Container "${GruntzDataOutputDir}\MOVIEZ") {
+        Move-Item -Force -Path "${GruntzDataOutputDir}\MOVIEZ" -Destination $GruntzDataMoviesOutputDir
     }
 
     Foreach ($DirectoryToMerge In $DirectoriesToMergeIntoRoot) {
-        $DirectoryPath = "$GruntzDataOutputDir\$DirectoryToMerge"
+        $DirectoryPath = "${GruntzDataOutputDir}\${DirectoryToMerge}"
 
         If (Test-Path -PathType Container $DirectoryPath) {
             Get-ChildItem -Path $DirectoryPath -Recurse | Move-Item -Force -Destination $GruntzDataOutputDir
@@ -274,7 +276,7 @@ Function Remove-UselessFiles
     $UselessFiles += $DirectoriesToMergeIntoRoot
 
     Foreach ($UselessFile In $UselessFiles) {
-        $UselessFilePath = "$GruntzDataOutputDir\$UselessFile"
+        $UselessFilePath = "${GruntzDataOutputDir}\${UselessFile}"
 
         If (Test-Path -PathType Any $UselessFilePath) {
             Remove-Item -Recurse -Force $UselessFilePath
@@ -284,8 +286,8 @@ Function Remove-UselessFiles
 
 Function Rename-Files
 {
-    If (Test-Path -PathType Leaf "$GruntzDataOutputDir\AUTORUN.ICO") {
-        Move-Item -Force -Path "$GruntzDataOutputDir\AUTORUN.ICO" -Destination "$GruntzDataOutputDir\GRUNTZ.ICO"
+    If (Test-Path -PathType Leaf "${GruntzDataOutputDir}\AUTORUN.ICO") {
+        Move-Item -Force -Path "${GruntzDataOutputDir}\AUTORUN.ICO" -Destination "${GruntzDataOutputDir}\GRUNTZ.ICO"
     }
 }
 
@@ -301,11 +303,11 @@ Function Import-Ddraw
     }
 
     If (Test-Path -PathType Leaf $DdrawArchiveName) {
-        & (Get-7zip) 'x' '-aoa' "-o$DdrawDataOutputDir" $DdrawArchiveName
+        & (Get-7zip) 'x' '-aoa' "-o${DdrawDataOutputDir}" $DdrawArchiveName
     }
 
-    If (Test-Path -PathType Leaf "$DdrawDataOutputDir\license.txt") {
-        Move-Item -Force -Path "$DdrawDataOutputDir\license.txt" -Destination "$DdrawDataOutputDir\ddraw-license.txt"
+    If (Test-Path -PathType Leaf "${DdrawDataOutputDir}\license.txt") {
+        Move-Item -Force -Path "${DdrawDataOutputDir}\license.txt" -Destination "${DdrawDataOutputDir}\ddraw-license.txt"
     }
 }
 
@@ -321,7 +323,7 @@ Function Import-DgVoodooDdraw
     }
 
     If (Test-Path -PathType Leaf $DgVoodooDdrawArchiveName) {
-        & (Get-7zip) 'x' '-aoa' "-o$DgVoodooDdrawOutputDir" $DgVoodooDdrawArchiveName
+        & (Get-7zip) 'x' '-aoa' "-o${DgVoodooDdrawOutputDir}" $DgVoodooDdrawArchiveName
     }
 }
 
@@ -337,7 +339,7 @@ Function Import-Patch
     }
 
     If (Test-Path -PathType Leaf $PatchArchiveName) {
-        & (Get-7zip) 'x' '-aoa' "-o$PatchDataOutputDir" $PatchArchiveName
+        & (Get-7zip) 'x' '-aoa' "-o${PatchDataOutputDir}" $PatchArchiveName
     }
 }
 
@@ -353,7 +355,7 @@ Function Import-Editor
     }
 
     If (Test-Path -PathType Leaf $EditorArchiveName) {
-        & (Get-7zip) 'x' '-aoa' "-o$EditorDataOutputDir" $EditorArchiveName
+        & (Get-7zip) 'x' '-aoa' "-o${EditorDataOutputDir}" $EditorArchiveName
     }
 }
 
@@ -369,7 +371,7 @@ Function Import-Samples
     }
 
     If (Test-Path -PathType Leaf $SamplesArchiveName) {
-        & (Get-7zip) 'x' '-aoa' "-o$SamplesDataOutputDir" $SamplesArchiveName
+        & (Get-7zip) 'x' '-aoa' "-o${SamplesDataOutputDir}" $SamplesArchiveName
     }
 }
 
@@ -385,7 +387,7 @@ Function Import-CustomLevelForkland
     }
 
     If (Test-Path -PathType Leaf $CustomLevelForklandArchiveName) {
-        & (Get-7zip) 'x' '-aoa' "-o$CustomLevelForklandDataOutputDir" $CustomLevelForklandArchiveName
+        & (Get-7zip) 'x' '-aoa' "-o${CustomLevelForklandDataOutputDir}" $CustomLevelForklandArchiveName
     }
 }
 
@@ -401,7 +403,7 @@ Function Import-CustomLevelDirtland
     }
 
     If (Test-Path -PathType Leaf $CustomLevelDirtlandArchiveName) {
-        & (Get-7zip) 'x' '-aoa' "-o$CustomLevelDirtlandDataOutputDir" $CustomLevelDirtlandArchiveName
+        & (Get-7zip) 'x' '-aoa' "-o${CustomLevelDirtlandDataOutputDir}" $CustomLevelDirtlandArchiveName
     }
 }
 
@@ -415,13 +417,13 @@ Function Convert-Binaries
         '81C7F648DB99501BED6E1EE71E66E4A0'
     )
 
-    $GruntzHash = Get-FileHash -Algorithm MD5 "$GruntzDataOutputDir\GRUNTZ.EXE" | Select -ExpandProperty Hash
+    $GruntzHash = Get-FileHash -Algorithm MD5 "${GruntzDataOutputDir}\GRUNTZ.EXE" | Select -ExpandProperty Hash
 
     If ($ValidGruntzHashes.Contains($GruntzHash)) {
-        Write-Output "> Cracking $GruntzDataOutputDir\GRUNTZ.EXE"
+        Write-Output "> Cracking ${GruntzDataOutputDir}\GRUNTZ.EXE"
 
         Try {
-            [Byte[]] $Bytes = Get-Content "$GruntzDataOutputDir\GRUNTZ.EXE" -Encoding Byte
+            [Byte[]] $Bytes = Get-Content "${GruntzDataOutputDir}\GRUNTZ.EXE" -Encoding Byte
 
             If ($UseOriginalCrack) {
                 $Bytes[0x0001F4CC] = 0x2E
@@ -453,7 +455,7 @@ Function Convert-Binaries
                 $Bytes[0x0001F15A] = 0x93
             }
 
-            $Bytes | Set-Content "$GruntzDataOutputDir\GRUNTZ.EXE" -Encoding Byte
+            $Bytes | Set-Content "${GruntzDataOutputDir}\GRUNTZ.EXE" -Encoding Byte
         } Catch {
             $_
         }
@@ -463,13 +465,13 @@ Function Convert-Binaries
         '199D4613E4587E1D720623DC11569E4D'
     )
 
-    $PatchHash = Get-FileHash -Algorithm MD5 "$PatchDataOutputDir\GRUNTZ.EXE" | Select -ExpandProperty Hash
+    $PatchHash = Get-FileHash -Algorithm MD5 "${PatchDataOutputDir}\GRUNTZ.EXE" | Select -ExpandProperty Hash
 
     If ($PatchValidHashes.Contains($PatchHash)) {
-        Write-Output "> Cracking $PatchDataOutputDir\GRUNTZ.EXE"
+        Write-Output "> Cracking ${PatchDataOutputDir}\GRUNTZ.EXE"
 
         Try {
-            [Byte[]] $Bytes = Get-Content "$PatchDataOutputDir\GRUNTZ.EXE" -Encoding Byte
+            [Byte[]] $Bytes = Get-Content "${PatchDataOutputDir}\GRUNTZ.EXE" -Encoding Byte
 
             If ($UseOriginalCrack) {
                 $Bytes[0x0001F4DC] = 0x2E
@@ -501,7 +503,7 @@ Function Convert-Binaries
                 $Bytes[0x0001F16A] = 0x93
             }
 
-            $Bytes | Set-Content "$PatchDataOutputDir\GRUNTZ.EXE" -Encoding Byte
+            $Bytes | Set-Content "${PatchDataOutputDir}\GRUNTZ.EXE" -Encoding Byte
         } Catch {
             $_
         }
@@ -523,7 +525,7 @@ Function Build-Installer
     If ($ExcludeMovies) {
         $ExcludeString += 'eu.murda.gruntz.movies'
 
-        Set-Variable -Name 'InstallerName' -Value ("$InstallerName" + '-no-movie') -Scope Global
+        Set-Variable -Name 'InstallerName' -Value ("${InstallerName}" + '-no-movie') -Scope Global
     }
 
     If ($ExcludeString) {
@@ -533,14 +535,14 @@ Function Build-Installer
     If ($UseDgVoodooDdraw) {
         $ExcludeString += 'eu.murda.gruntz.ddraw'
 
-        Set-Variable -Name 'InstallerName' -Value ("$InstallerName" + '-dgvoodoo') -Scope Global
+        Set-Variable -Name 'InstallerName' -Value ("${InstallerName}" + '-dgvoodoo') -Scope Global
     } Else {
         $ExcludeString += 'eu.murda.gruntz.dgvoodoo.ddraw'
     }
 
-    $Params += '-e', "$ExcludeString"
+    $Params += '-e', "${ExcludeString}"
 
-    Set-Variable -Name 'InstallerName' -Value ("$InstallerName" + $InstallerExtension) -Scope Global
+    Set-Variable -Name 'InstallerName' -Value ("${InstallerName}" + $InstallerExtension) -Scope Global
     $Params += "$InstallerName"
 
     & (Get-BinaryCreator) $Params
@@ -549,9 +551,9 @@ Function Build-Installer
 Function Compress-Installer
 {
     If ($CompressInstallerIfPossible -And (-Not ((Get-Upx) -Eq 1))) {
-        If (Test-Path -PathType Leaf "$InstallerName") {
+        If (Test-Path -PathType Leaf "${InstallerName}") {
             Write-Output "> Compressing the installer to save disk space."
-            & (Get-Upx) '-9' "$InstallerName"
+            & (Get-Upx) '-9' "${InstallerName}"
         }
     }
 }
