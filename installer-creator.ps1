@@ -145,7 +145,6 @@ Function Main
 	Clear-DataOutputDirs
 }
 
-
 Function Get-ValueFromIniFile
 {
     Param(
@@ -154,7 +153,7 @@ Function Get-ValueFromIniFile
 
     $Ini = @{}
 
-	Switch -Regex -File "${PSScriptRoot}\sources.ini" {
+	Switch -Regex -File "${PSScriptRoot}\settings.ini" {
         "^\[(.+)\]$"
         {
             $Section = $Matches[1]

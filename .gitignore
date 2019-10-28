@@ -3,3 +3,4 @@
 /packages/*/data/*
 /dist/*
 !/dist/.gitkeep
+/settings.ini
