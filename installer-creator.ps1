@@ -141,8 +141,53 @@ Function Main
     Convert-Binaries
     Build-Installer
     Compress-Installer
-	
+
 	Clear-DataOutputDirs
+}
+
+
+Function Get-ValueFromIniFile
+{
+    Param(
+        [parameter(Mandatory = $True)] [string] $Key
+    )
+
+    $Ini = @{}
+
+	Switch -Regex -File "${PSScriptRoot}\sources.ini" {
+        "^\[(.+)\]$"
+        {
+            $Section = $Matches[1]
+            $Ini[$Section] = @{}
+            $CommentCount = 0
+        }
+
+        "^(;.*)$"
+        {
+            If (-Not ($Section)) {
+                $Section = 'global'
+                $Ini[$Section] = @{}
+            }
+
+            $Value = $Matches[1]
+            $CommentCount = $CommentCount + 1
+            $Name = 'Comment' + $CommentCount
+            $Ini[$Section][$Name] = $Value
+        }
+
+        "(.+?)\s*=\s*(.*)"
+        {
+            If (-Not ($Section)) {
+                $Section = 'global'
+                $Ini[$Section] = @{}
+            }
+
+            $Name, $Value = $Matches[1..2]
+            $Ini[$Section][$Name] = $Value
+        }
+    }
+
+	Return $Ini.$Section.$Key
 }
 
 Function Get-7zip
