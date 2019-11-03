@@ -27,18 +27,18 @@ Param(
 Set-StrictMode -Version 3
 
 $global:InstallerName = "${PSScriptRoot}\dist\gruntz-installer"
-$InstallerExtension = '.exe'
+$global:InstallerExtension = '.exe'
 
-$ExcludeMovies = 0
-$UseDgVoodooDdraw = 0
+$global:ExcludeMovies = 0
+$global:UseDgVoodooDdraw = 0
 
-$CrackBinariesIfPossible = 1
-$UseOriginalCrack = 0
-$CompressInstallerIfPossible = 1
+$global:CrackBinariesIfPossible = 1
+$global:UseOriginalCrack = 0
+$global:CompressInstallerIfPossible = 1
 
-$7zipFallback = ''
-$BinaryCreatorFallback = ''
-$UpxFallback = ''
+$global:7zipFallback = ''
+$global:BinaryCreatorFallback = ''
+$global:UpxFallback = ''
 
 $GruntzDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz\data"
 $GruntzDataMoviesOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.movies\data"
@@ -81,6 +81,8 @@ $DirectoriesToMergeIntoRoot = @(
 
 Function Main
 {
+    Get-FallbacksFromIniFile
+
     If ((Get-7zip) -Eq 1) {
         Write-Output "> Unable to find 7z.exe from your environment's PATH variable."
         Write-Output '> Aborting.'
@@ -187,6 +189,37 @@ Function Get-ValueFromIniFile
     }
 
 	Return $Ini.$Section.$Key
+}
+
+Function Get-FallbacksFromIniFile
+{
+    If (-Not (Test-Path -PathType Leaf "${PSScriptRoot}\settings.ini")) {
+        Return
+    }
+
+    If ([string]::IsNullOrEmpty($7zipFallback)) {
+        $Ini7zipFallback = Get-ValueFromIniFile 'windows_7zip_fallback'
+
+        If (-Not [string]::IsNullOrEmpty($Ini7zipFallback)) {
+            $7zipFallback = $Ini7zipFallback
+        }
+    }
+
+    If ([string]::IsNullOrEmpty($BinaryCreatorFallback)) {
+        $IniBinaryCreatorFallback = Get-ValueFromIniFile 'windows_binarycreator_fallback'
+
+        If (-Not [string]::IsNullOrEmpty($IniBinaryCreatorFallback)) {
+            $BinaryCreatorFallback = $IniBinaryCreatorFallback
+        }
+    }
+
+    If ([string]::IsNullOrEmpty($UpxFallback)) {
+        $IniUpxFallback = Get-ValueFromIniFile 'windows_upx_fallback'
+
+        If (-Not [string]::IsNullOrEmpty($IniUpxFallback)) {
+            $UpxFallback = $IniUpxFallback
+        }
+    }
 }
 
 Function Get-7zip
