@@ -227,15 +227,15 @@ Function Get-SettingsFromIniFile
 {
     $IniFileExists = 0
 
-    If (-Not (Test-Path -PathType Leaf "${PSScriptRoot}\settings.ini")) {
+    If (Test-Path -PathType Leaf "${PSScriptRoot}\settings.ini") {
         $IniFileExists = 1
     }
 
-    If ($IniFileExists -And [string]::IsNullOrEmpty($ExcludeMovies)) {
+    If ($IniFileExists -And ($ExcludeMovies -Eq $null)) {
         $IniExcludeMovies = Get-ValueFromIniFile 'exclude_movies'
 
         If (-Not [string]::IsNullOrEmpty($IniExcludeMovies)) {
-            $global:ExcludeMovies = $IniExcludeMovies
+            $global:ExcludeMovies = [int] $IniExcludeMovies
         } Else {
             $global:ExcludeMovies = 0
         }
@@ -243,11 +243,11 @@ Function Get-SettingsFromIniFile
         $global:ExcludeMovies = 0
     }
 
-    If ($IniFileExists -And [string]::IsNullOrEmpty($UseDgVoodooDdraw)) {
+    If ($IniFileExists -And ($UseDgVoodooDdraw -Eq $null)) {
         $IniUseDgVoodooDdraw = Get-ValueFromIniFile 'use_dgvoodoo_ddraw'
 
         If (-Not [string]::IsNullOrEmpty($IniUseDgVoodooDdraw)) {
-            $global:UseDgVoodooDdraw = $IniUseDgVoodooDdraw
+            $global:UseDgVoodooDdraw = [int] $IniUseDgVoodooDdraw
         } Else {
             $global:UseDgVoodooDdraw = 0
         }
@@ -255,11 +255,11 @@ Function Get-SettingsFromIniFile
         $global:UseDgVoodooDdraw = 0
     }
 
-    If ($IniFileExists -And [string]::IsNullOrEmpty($CrackBinariesIfPossible)) {
+    If ($IniFileExists -And ($CrackBinariesIfPossible -Eq $null)) {
         $IniCrackBinariesIfPossible = Get-ValueFromIniFile 'crack_binaries_if_possible'
 
         If (-Not [string]::IsNullOrEmpty($IniCrackBinariesIfPossible)) {
-            $global:CrackBinariesIfPossible = $IniCrackBinariesIfPossible
+            $global:CrackBinariesIfPossible = [int] $IniCrackBinariesIfPossible
         } Else {
             $global:CrackBinariesIfPossible = 1
         }
@@ -267,11 +267,11 @@ Function Get-SettingsFromIniFile
         $global:CrackBinariesIfPossible = 1
     }
 
-    If ($IniFileExists -And [string]::IsNullOrEmpty($UseOriginalCrack)) {
+    If ($IniFileExists -And ($UseOriginalCrack -Eq $null)) {
         $IniUseOriginalCrack = Get-ValueFromIniFile 'use_original_crack'
 
         If (-Not [string]::IsNullOrEmpty($IniUseOriginalCrack)) {
-            $global:UseOriginalCrack = $IniUseOriginalCrack
+            $global:UseOriginalCrack = [int] $IniUseOriginalCrack
         } Else {
             $global:UseOriginalCrack = 0
         }
@@ -279,11 +279,11 @@ Function Get-SettingsFromIniFile
         $global:UseOriginalCrack = 0
     }
 
-    If ($IniFileExists -And [string]::IsNullOrEmpty($CompressInstallerIfPossible)) {
+    If ($IniFileExists -And ($CompressInstallerIfPossible -Eq $null)) {
         $IniCompressInstallerIfPossible = Get-ValueFromIniFile 'compress_installer_if_possible'
 
         If (-Not [string]::IsNullOrEmpty($IniCompressInstallerIfPossible)) {
-            $global:CompressInstallerIfPossible = $IniCompressInstallerIfPossible
+            $global:CompressInstallerIfPossible = [int] $IniCompressInstallerIfPossible
         } Else {
             $global:CompressInstallerIfPossible = 1
         }
