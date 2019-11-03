@@ -119,11 +119,11 @@ Function Main
 
     Clear-DataOutputDirs
 
-    If ((Create-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
+    If ((New-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
         Write-Output "> Created directory: '${GruntzDataOutputDir}'."
     }
 
-    If ((Create-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
+    If ((New-Directory $GruntzDataMoviesOutputDir) -Eq 0) {
         Write-Output "> Created directory: '${GruntzDataMoviesOutputDir}'."
     }
 
@@ -142,7 +142,7 @@ Function Main
     Import-CustomLevelDirtland
 
     Convert-Binaries
-    Build-Installer
+    Publish-Installer
     Compress-Installer
 
 	Clear-DataOutputDirs
@@ -295,7 +295,7 @@ Function Get-SettingsFromIniFile
 Function Get-7zip
 {
     If (Get-Command '7z.exe' -ErrorAction SilentlyContinue) {
-        Return (Get-Command '7z.exe' | Select -ExpandProperty Source)
+        Return (Get-Command '7z.exe' | Select-Object -ExpandProperty Source)
     } Else {
         If (-Not ([string]::IsNullOrEmpty($7zipFallback))) {
             Return $7zipFallback
@@ -308,7 +308,7 @@ Function Get-7zip
 Function Get-BinaryCreator
 {
     If (Get-Command 'binarycreator.exe' -ErrorAction SilentlyContinue) {
-        Return (Get-Command 'binarycreator.exe' | Select -ExpandProperty Source)
+        Return (Get-Command 'binarycreator.exe' | Select-Object -ExpandProperty Source)
     } Else {
         If (-Not ([string]::IsNullOrEmpty($BinaryCreatorFallback))) {
             Return $BinaryCreatorFallback
@@ -321,14 +321,14 @@ Function Get-BinaryCreator
 Function Get-Upx
 {
     If (Get-Command 'upx.exe' -ErrorAction SilentlyContinue) {
-        Return (Get-Command 'upx.exe' | Select -ExpandProperty Source)
+        Return (Get-Command 'upx.exe' | Select-Object -ExpandProperty Source)
     } Else {
         If (-Not ([string]::IsNullOrEmpty($UpxFallback))) {
             Return $UpxFallback
         } Else {
             If ($CompressInstallerIfPossible) {
                 Write-Output "> Unable to find upx.exe from your environment's PATH variable."
-                echo '> Compressing the installer will be skipped.'
+                Write-Output '> Compressing the installer will be skipped.'
             }
         }
     }
@@ -336,7 +336,7 @@ Function Get-Upx
     Return 1
 }
 
-Function Create-Directory ([string] $Directory)
+Function New-Directory ([string] $Directory)
 {
     If (-Not (Test-Path -PathType Container $Directory)) {
         [void] (New-Item -Path $Directory -ItemType Directory)
@@ -367,7 +367,7 @@ Function Test-Media ([string] $Path)
         Return 1
     }
 
-    $Hash = Get-FileHash -Algorithm MD5 $Path | Select -ExpandProperty Hash
+    $Hash = Get-FileHash -Algorithm MD5 $Path | Select-Object -ExpandProperty Hash
 
     If (-Not ($ValidHashes.Contains($Hash))) {
         Return 2
@@ -564,7 +564,7 @@ Function Convert-Binaries
         '81C7F648DB99501BED6E1EE71E66E4A0'
     )
 
-    $GruntzHash = Get-FileHash -Algorithm MD5 "${GruntzDataOutputDir}\GRUNTZ.EXE" | Select -ExpandProperty Hash
+    $GruntzHash = Get-FileHash -Algorithm MD5 "${GruntzDataOutputDir}\GRUNTZ.EXE" | Select-Object -ExpandProperty Hash
 
     If ($ValidGruntzHashes.Contains($GruntzHash)) {
         Write-Output "> Cracking ${GruntzDataOutputDir}\GRUNTZ.EXE"
@@ -612,7 +612,7 @@ Function Convert-Binaries
         '199D4613E4587E1D720623DC11569E4D'
     )
 
-    $PatchHash = Get-FileHash -Algorithm MD5 "${PatchDataOutputDir}\GRUNTZ.EXE" | Select -ExpandProperty Hash
+    $PatchHash = Get-FileHash -Algorithm MD5 "${PatchDataOutputDir}\GRUNTZ.EXE" | Select-Object -ExpandProperty Hash
 
     If ($PatchValidHashes.Contains($PatchHash)) {
         Write-Output "> Cracking ${PatchDataOutputDir}\GRUNTZ.EXE"
@@ -657,7 +657,7 @@ Function Convert-Binaries
     }
 }
 
-Function Build-Installer
+Function Publish-Installer
 {
     Write-Output "> Creating installer."
 
