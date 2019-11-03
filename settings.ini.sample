@@ -1,14 +1,12 @@
-[sources]
+[global]
 media=
 
-[options]
 exclude_movies=0
 use_dgvoodoo_ddraw=0
 crack_binaries_if_possible=1
 use_original_crack=0
 compress_installer_if_possible=1
 
-[fallbacks]
 windows_7zip_fallback=
 windows_binarycreator_fallback=
 windows_upx_fallback=

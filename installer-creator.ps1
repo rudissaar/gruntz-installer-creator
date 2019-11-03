@@ -29,12 +29,12 @@ Set-StrictMode -Version 3
 $global:InstallerName = "${PSScriptRoot}\dist\gruntz-installer"
 $global:InstallerExtension = '.exe'
 
-$global:ExcludeMovies = 0
-$global:UseDgVoodooDdraw = 0
+$global:ExcludeMovies = $null # Defaults to 0.
+$global:UseDgVoodooDdraw = $null # Defaults to 0.
 
-$global:CrackBinariesIfPossible = 1
-$global:UseOriginalCrack = 0
-$global:CompressInstallerIfPossible = 1
+$global:CrackBinariesIfPossible = $null # Defaults to 1.
+$global:UseOriginalCrack = $null # Defaults to 0.
+$global:CompressInstallerIfPossible = $null  # Defaults to 1.
 
 $global:7zipFallback = ''
 $global:BinaryCreatorFallback = ''
@@ -82,6 +82,7 @@ $DirectoriesToMergeIntoRoot = @(
 Function Main
 {
     Get-FallbacksFromIniFile
+    Get-SettingsFromIniFile
 
     If ((Get-7zip) -Eq 1) {
         Write-Output "> Unable to find 7z.exe from your environment's PATH variable."
@@ -219,6 +220,75 @@ Function Get-FallbacksFromIniFile
         If (-Not [string]::IsNullOrEmpty($IniUpxFallback)) {
             $UpxFallback = $IniUpxFallback
         }
+    }
+}
+
+Function Get-SettingsFromIniFile
+{
+    $IniFileExists = 0
+
+    If (-Not (Test-Path -PathType Leaf "${PSScriptRoot}\settings.ini")) {
+        $IniFileExists = 1
+    }
+
+    If ($IniFileExists -And [string]::IsNullOrEmpty($ExcludeMovies)) {
+        $IniExcludeMovies = Get-ValueFromIniFile 'exclude_movies'
+
+        If (-Not [string]::IsNullOrEmpty($IniExcludeMovies)) {
+            $global:ExcludeMovies = $IniExcludeMovies
+        } Else {
+            $global:ExcludeMovies = 0
+        }
+    } Else {
+        $global:ExcludeMovies = 0
+    }
+
+    If ($IniFileExists -And [string]::IsNullOrEmpty($UseDgVoodooDdraw)) {
+        $IniUseDgVoodooDdraw = Get-ValueFromIniFile 'use_dgvoodoo_ddraw'
+
+        If (-Not [string]::IsNullOrEmpty($IniUseDgVoodooDdraw)) {
+            $global:UseDgVoodooDdraw = $IniUseDgVoodooDdraw
+        } Else {
+            $global:UseDgVoodooDdraw = 0
+        }
+    } Else {
+        $global:UseDgVoodooDdraw = 0
+    }
+
+    If ($IniFileExists -And [string]::IsNullOrEmpty($CrackBinariesIfPossible)) {
+        $IniCrackBinariesIfPossible = Get-ValueFromIniFile 'crack_binaries_if_possible'
+
+        If (-Not [string]::IsNullOrEmpty($IniCrackBinariesIfPossible)) {
+            $global:CrackBinariesIfPossible = $IniCrackBinariesIfPossible
+        } Else {
+            $global:CrackBinariesIfPossible = 1
+        }
+    } Else {
+        $global:CrackBinariesIfPossible = 1
+    }
+
+    If ($IniFileExists -And [string]::IsNullOrEmpty($UseOriginalCrack)) {
+        $IniUseOriginalCrack = Get-ValueFromIniFile 'use_original_crack'
+
+        If (-Not [string]::IsNullOrEmpty($IniUseOriginalCrack)) {
+            $global:UseOriginalCrack = $IniUseOriginalCrack
+        } Else {
+            $global:UseOriginalCrack = 0
+        }
+    } Else {
+        $global:UseOriginalCrack = 0
+    }
+
+    If ($IniFileExists -And [string]::IsNullOrEmpty($CompressInstallerIfPossible)) {
+        $IniCompressInstallerIfPossible = Get-ValueFromIniFile 'compress_installer_if_possible'
+
+        If (-Not [string]::IsNullOrEmpty($IniCompressInstallerIfPossible)) {
+            $global:CompressInstallerIfPossible = $IniCompressInstallerIfPossible
+        } Else {
+            $global:CompressInstallerIfPossible = 1
+        }
+    } Else {
+        $global:CompressInstallerIfPossible = 1
     }
 }
 
