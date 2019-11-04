@@ -686,7 +686,7 @@ Function Publish-Installer
     If ($ExcludeMovies) {
         $ExcludeString += 'eu.murda.gruntz.movies'
 
-        Set-Variable -Name 'InstallerName' -Value ("${InstallerName}" + '-no-movie') -Scope Global
+        $global:InstallerName = "${InstallerName}-no-movie"
     }
 
     If ($ExcludeString) {
@@ -696,15 +696,15 @@ Function Publish-Installer
     If ($UseDgVoodooDdraw) {
         $ExcludeString += 'eu.murda.gruntz.ddraw'
 
-        Set-Variable -Name 'InstallerName' -Value ("${InstallerName}" + '-dgvoodoo') -Scope Global
+        $global:InstallerName = "${InstallerName}-dgvoodoo"
     } Else {
         $ExcludeString += 'eu.murda.gruntz.dgvoodoo.ddraw'
     }
 
     $Params += '-e', "${ExcludeString}"
 
-    Set-Variable -Name 'InstallerName' -Value ("${InstallerName}" + $InstallerExtension) -Scope Global
-    $Params += "$InstallerName"
+    $global:InstallerName = "${InstallerName}${InstallerExtension}"
+    $Params += "${InstallerName}"
 
     & (Get-BinaryCreator) $Params
 }
