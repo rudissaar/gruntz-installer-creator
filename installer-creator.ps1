@@ -21,7 +21,7 @@
 
 [CmdletBinding()]
 Param(
-    $Media = "${PSScriptRoot}\gruntz.iso"
+    $global:Media = "${PSScriptRoot}\gruntz.iso"
 )
 
 Set-StrictMode -Version 3
@@ -81,6 +81,7 @@ $DirectoriesToMergeIntoRoot = @(
 
 Function Main
 {
+    Get-MediaFromIniFile
     Get-FallbacksFromIniFile
     Get-SettingsFromIniFile
 
@@ -190,6 +191,19 @@ Function Get-ValueFromIniFile
     }
 
 	Return $Ini.$Section.$Key
+}
+
+Function Get-MediaFromIniFile
+{
+    If (-Not (Test-Path -PathType Leaf "${PSScriptRoot}\settings.ini")) {
+        Return
+    }
+
+    $IniMedia = Get-ValueFromIniFile 'media'
+
+    If (-Not [string]::IsNullOrEmpty($IniMedia)) {
+        $global:Media = $IniMedia
+    }
 }
 
 Function Get-FallbacksFromIniFile
