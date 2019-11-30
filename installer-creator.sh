@@ -8,6 +8,7 @@
 
 # REQUIREMENTS
 # - wget
+# - awk
 # - p7zip
 # - Qt Installer Framework 3.0 or higher
 # - UPX (Optional)
@@ -34,10 +35,30 @@ P7ZIP_FALLBACK=''
 BINARYCREATOR_FALLBACK=''
 UPX_FALLBACK=''
 
-MEDIA="${RELATIVE_PATH}/gruntz.iso"
-
-if [[ ! -z "${1}" ]]; then
+# Handle parameters.
+if [ ! -z "${1}" ]; then
     MEDIA="${1}"
+fi
+
+# If settings.ini file is not found, then lets generate it by copying sample.
+if [ ! -f "${RELATIVE_PATH}/settings.ini" ]; then
+    cp "${RELATIVE_PATH}/settings.ini.sample" "${RELATIVE_PATH}/settings.ini"
+fi
+
+# Function that reads settings.ini file and return values from it.
+GET_VALUE_FROM_INI_FILE () {
+    echo $(awk -F '=' '/'${1}'/ {print $2}' "${RELATIVE_PATH}/settings.ini")
+}
+
+# Reading settings from settings.ini file.
+if [ -z ${MEDIA} ]; then
+    INI_MEDIA=$(GET_VALUE_FROM_INI_FILE media)
+
+    if [ ! -z ${INI_MEDIA} ]; then
+        MEDIA=${INI_MEDIA}
+    else
+        MEDIA="${RELATIVE_PATH}/gruntz.iso"
+    fi
 fi
 
 GRUNTZ_DATA_OUTPUT_DIR="${RELATIVE_PATH}/packages/eu.murda.gruntz/data"
