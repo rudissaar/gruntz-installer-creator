@@ -24,7 +24,7 @@ INSTALLER_EXTENSION='.run'
 
 # Gruntz seems to be failing to play movie (MOVIEZ/*.FEC) files on Linux platform with wine software,
 # until this issue hasn't been solved we'll be excluding them.
-EXCLUDE_MOVIES=1
+EXCLUDE_MOVIES= # Defaults to 1.
 
 CRACK_BINARIES_IF_POSSIBLE=1
 USE_ORIGINAL_CRACK=0
@@ -58,6 +58,16 @@ if [ -z ${MEDIA} ]; then
         MEDIA=${INI_MEDIA}
     else
         MEDIA="${RELATIVE_PATH}/gruntz.iso"
+    fi
+fi
+
+if [ -z ${EXCLUDE_MOVIES} ]; then
+    INI_EXCLUDE_MOVIES=$(GET_VALUE_FROM_INI_FILE unix_exclude_movies)
+
+    if [ ! -z ${INI_EXCLUDE_MOVIES} ]; then
+        EXCLUDE_MOVIES=${INI_EXCLUDE_MOVIES}
+    else
+        EXCLUDE_MOVIES=1
     fi
 fi
 

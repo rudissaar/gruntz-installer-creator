@@ -11,6 +11,7 @@ windows_7zip_fallback=
 windows_binarycreator_fallback=
 windows_upx_fallback=
 
+unix_exclude_movies=1
 unix_wget_fallback=
 unix_p7zip_fallback=
 unix_binarycreator_fallback=

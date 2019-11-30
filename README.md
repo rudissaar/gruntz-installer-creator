@@ -17,6 +17,7 @@ This project enables you to convert Gruntz ISO files into an installer that is c
 ## Requirements for UNIX
 
 * wget
+* awk
 * p7zip
 * Qt Installer Framework 3.0 or higher
 * UPX (Optional)
