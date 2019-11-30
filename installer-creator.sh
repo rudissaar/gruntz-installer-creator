@@ -26,9 +26,9 @@ INSTALLER_EXTENSION='.run'
 # until this issue hasn't been solved we'll be excluding them.
 EXCLUDE_MOVIES= # Defaults to 1.
 
-CRACK_BINARIES_IF_POSSIBLE=1
-USE_ORIGINAL_CRACK=0
-COMPRESS_INSTALLER_IF_POSSIBLE=1
+CRACK_BINARIES_IF_POSSIBLE= # Defaults to 1.
+USE_ORIGINAL_CRACK= # Defaults to 0.
+COMPRESS_INSTALLER_IF_POSSIBLE= # Defaults to 1.
 
 WGET_FALLBACK=''
 P7ZIP_FALLBACK=''
@@ -68,6 +68,36 @@ if [ -z ${EXCLUDE_MOVIES} ]; then
         EXCLUDE_MOVIES=${INI_EXCLUDE_MOVIES}
     else
         EXCLUDE_MOVIES=1
+    fi
+fi
+
+if [ -z ${CRACK_BINARIES_IF_POSSIBLE} ]; then
+    INI_CRACK_BINARIES_IF_POSSIBLE=$(GET_VALUE_FROM_INI_FILE crack_binaries_if_possible)
+
+    if [ ! -z ${INI_CRACK_BINARIES_IF_POSSIBLE} ]; then
+        CRACK_BINARIES_IF_POSSIBLE=${INI_CRACK_BINARIES_IF_POSSIBLE}
+    else
+        CRACK_BINARIES_IF_POSSIBLE=1
+    fi
+fi
+
+if [ -z ${USE_ORIGINAL_CRACK} ]; then
+    INI_USE_ORIGINAL_CRACK=$(GET_VALUE_FROM_INI_FILE use_original_crack)
+
+    if [ ! -z ${INI_USE_ORIGINAL_CRACK} ]; then
+        USE_ORIGINAL_CRACK=${INI_USE_ORIGINAL_CRACK}
+    else
+        USE_ORIGINAL_CRACK=0
+    fi
+fi
+
+if [ -z ${COMPRESS_INSTALLER_IF_POSSIBLE} ]; then
+    INI_COMPRESS_INSTALLER_IF_POSSIBLE=$(GET_VALUE_FROM_INI_FILE compress_installer_if_possible)
+
+    if [ ! -z ${INI_COMPRESS_INSTALLER_IF_POSSIBLE} ]; then
+        COMPRESS_INSTALLER_IF_POSSIBLE=${INI_COMPRESS_INSTALLER_IF_POSSIBLE}
+    else
+        COMPRESS_INSTALLER_IF_POSSIBLE=1
     fi
 fi
 
