@@ -30,10 +30,10 @@ CRACK_BINARIES_IF_POSSIBLE= # Defaults to 1.
 USE_ORIGINAL_CRACK= # Defaults to 0.
 COMPRESS_INSTALLER_IF_POSSIBLE= # Defaults to 1.
 
-WGET_FALLBACK=''
-P7ZIP_FALLBACK=''
-BINARYCREATOR_FALLBACK=''
-UPX_FALLBACK=''
+WGET_FALLBACK=
+P7ZIP_FALLBACK=
+BINARYCREATOR_FALLBACK=
+UPX_FALLBACK=
 
 # Handle parameters.
 if [ ! -z "${1}" ]; then
@@ -98,6 +98,39 @@ if [ -z ${COMPRESS_INSTALLER_IF_POSSIBLE} ]; then
         COMPRESS_INSTALLER_IF_POSSIBLE=${INI_COMPRESS_INSTALLER_IF_POSSIBLE}
     else
         COMPRESS_INSTALLER_IF_POSSIBLE=1
+    fi
+fi
+
+# Reading fallbacks from settings.ini file.
+if [ -z ${WGET_FALLBACK} ]; then
+    INI_WGET_FALLBACK=$(GET_VALUE_FROM_INI_FILE unix_wget_fallback)
+
+    if [ ! -z ${INI_WGET_FALLBACK} ]; then
+        WGET_FALLBACK=${INI_WGET_FALLBACK}
+    fi
+fi
+
+if [ -z ${P7ZIP_FALLBACK} ]; then
+    INI_P7ZIP_FALLBACK=$(GET_VALUE_FROM_INI_FILE unix_p7zip_fallback)
+
+    if [ ! -z ${INI_P7ZIP_FALLBACK} ]; then
+        P7ZIP_FALLBACK=${INI_P7ZIP_FALLBACK}
+    fi
+fi
+
+if [ -z ${BINARYCREATOR_FALLBACK} ]; then
+    INI_BINARYCREATOR_FALLBACK=$(GET_VALUE_FROM_INI_FILE unix_binarycreator_fallback)
+
+    if [ ! -z ${INI_BINARYCREATOR_FALLBACK} ]; then
+        BINARYCREATOR_FALLBACK=${INI_BINARYCREATOR_FALLBACK}
+    fi
+fi
+
+if [ -z ${UPX_FALLBACK} ]; then
+    INI_UPX_FALLBACK=$(GET_VALUE_FROM_INI_FILE unix_upx_fallback)
+
+    if [ ! -z ${INI_UPX_FALLBACK} ]; then
+        UPX_FALLBACK=${INI_UPX_FALLBACK}
     fi
 fi
 
