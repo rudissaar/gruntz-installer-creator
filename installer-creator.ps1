@@ -246,7 +246,7 @@ Function Get-SettingsFromIniFile
     }
 
     If ($IniFileExists -And ($ExcludeMovies -Eq $null)) {
-        $IniExcludeMovies = Get-ValueFromIniFile 'exclude_movies'
+        $IniExcludeMovies = Get-ValueFromIniFile 'windows_exclude_movies'
 
         If (-Not [string]::IsNullOrEmpty($IniExcludeMovies)) {
             $global:ExcludeMovies = [int] $IniExcludeMovies
