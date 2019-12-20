@@ -21,24 +21,24 @@
 
 [CmdletBinding()]
 Param(
-    $global:Media = "${PSScriptRoot}\gruntz.iso"
+    $Global:Media = "${PSScriptRoot}\gruntz.iso"
 )
 
 Set-StrictMode -Version 3
 
-$global:InstallerName = "${PSScriptRoot}\dist\gruntz-installer"
-$global:InstallerExtension = '.exe'
+$Global:InstallerName = "${PSScriptRoot}\dist\gruntz-installer"
+$Global:InstallerExtension = '.exe'
 
-$global:ExcludeMovies = $null # Defaults to 0.
-$global:UseDgVoodooDdraw = $null # Defaults to 0.
+$Global:ExcludeMovies = $Null # Defaults to 0.
+$Global:UseDgVoodooDdraw = $Null # Defaults to 0.
 
-$global:CrackBinariesIfPossible = $null # Defaults to 1.
-$global:UseOriginalCrack = $null # Defaults to 0.
-$global:CompressInstallerIfPossible = $null  # Defaults to 1.
+$Global:CrackBinariesIfPossible = $Null # Defaults to 1.
+$Global:UseOriginalCrack = $Null # Defaults to 0.
+$Global:CompressInstallerIfPossible = $Null  # Defaults to 1.
 
-$global:7zipFallback = ''
-$global:BinaryCreatorFallback = ''
-$global:UpxFallback = ''
+$Global:7zipFallback = ''
+$Global:BinaryCreatorFallback = ''
+$Global:UpxFallback = ''
 
 $GruntzDataOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz\data"
 $GruntzDataMoviesOutputDir = "${PSScriptRoot}\packages\eu.murda.gruntz.movies\data"
@@ -202,7 +202,7 @@ Function Get-MediaFromIniFile
     $IniMedia = Get-ValueFromIniFile 'media'
 
     If (-Not [string]::IsNullOrEmpty($IniMedia)) {
-        $global:Media = $IniMedia
+        $Global:Media = $IniMedia
     }
 }
 
@@ -245,64 +245,64 @@ Function Get-SettingsFromIniFile
         $IniFileExists = 1
     }
 
-    If ($IniFileExists -And ($ExcludeMovies -Eq $null)) {
+    If ($IniFileExists -And ($ExcludeMovies -Eq $Null)) {
         $IniExcludeMovies = Get-ValueFromIniFile 'windows_exclude_movies'
 
         If (-Not [string]::IsNullOrEmpty($IniExcludeMovies)) {
-            $global:ExcludeMovies = [int] $IniExcludeMovies
+            $Global:ExcludeMovies = [int] $IniExcludeMovies
         } Else {
-            $global:ExcludeMovies = 0
+            $Global:ExcludeMovies = 0
         }
     } Else {
-        $global:ExcludeMovies = 0
+        $Global:ExcludeMovies = 0
     }
 
-    If ($IniFileExists -And ($UseDgVoodooDdraw -Eq $null)) {
+    If ($IniFileExists -And ($UseDgVoodooDdraw -Eq $Null)) {
         $IniUseDgVoodooDdraw = Get-ValueFromIniFile 'use_dgvoodoo_ddraw'
 
         If (-Not [string]::IsNullOrEmpty($IniUseDgVoodooDdraw)) {
-            $global:UseDgVoodooDdraw = [int] $IniUseDgVoodooDdraw
+            $Global:UseDgVoodooDdraw = [int] $IniUseDgVoodooDdraw
         } Else {
-            $global:UseDgVoodooDdraw = 0
+            $Global:UseDgVoodooDdraw = 0
         }
     } Else {
-        $global:UseDgVoodooDdraw = 0
+        $Global:UseDgVoodooDdraw = 0
     }
 
-    If ($IniFileExists -And ($CrackBinariesIfPossible -Eq $null)) {
+    If ($IniFileExists -And ($CrackBinariesIfPossible -Eq $Null)) {
         $IniCrackBinariesIfPossible = Get-ValueFromIniFile 'crack_binaries_if_possible'
 
         If (-Not [string]::IsNullOrEmpty($IniCrackBinariesIfPossible)) {
-            $global:CrackBinariesIfPossible = [int] $IniCrackBinariesIfPossible
+            $Global:CrackBinariesIfPossible = [int] $IniCrackBinariesIfPossible
         } Else {
-            $global:CrackBinariesIfPossible = 1
+            $Global:CrackBinariesIfPossible = 1
         }
     } Else {
-        $global:CrackBinariesIfPossible = 1
+        $Global:CrackBinariesIfPossible = 1
     }
 
-    If ($IniFileExists -And ($UseOriginalCrack -Eq $null)) {
+    If ($IniFileExists -And ($UseOriginalCrack -Eq $Null)) {
         $IniUseOriginalCrack = Get-ValueFromIniFile 'use_original_crack'
 
         If (-Not [string]::IsNullOrEmpty($IniUseOriginalCrack)) {
-            $global:UseOriginalCrack = [int] $IniUseOriginalCrack
+            $Global:UseOriginalCrack = [int] $IniUseOriginalCrack
         } Else {
-            $global:UseOriginalCrack = 0
+            $Global:UseOriginalCrack = 0
         }
     } Else {
-        $global:UseOriginalCrack = 0
+        $Global:UseOriginalCrack = 0
     }
 
-    If ($IniFileExists -And ($CompressInstallerIfPossible -Eq $null)) {
+    If ($IniFileExists -And ($CompressInstallerIfPossible -Eq $Null)) {
         $IniCompressInstallerIfPossible = Get-ValueFromIniFile 'compress_installer_if_possible'
 
         If (-Not [string]::IsNullOrEmpty($IniCompressInstallerIfPossible)) {
-            $global:CompressInstallerIfPossible = [int] $IniCompressInstallerIfPossible
+            $Global:CompressInstallerIfPossible = [int] $IniCompressInstallerIfPossible
         } Else {
-            $global:CompressInstallerIfPossible = 1
+            $Global:CompressInstallerIfPossible = 1
         }
     } Else {
-        $global:CompressInstallerIfPossible = 1
+        $Global:CompressInstallerIfPossible = 1
     }
 }
 
@@ -364,7 +364,7 @@ Function Clear-DataOutputDirs
 {
     $DataOutputDirs = (Get-ChildItem -Path "${PSScriptRoot}\packages" -Filter 'data' -Recurse -Directory).Fullname
 
-    Foreach ($DataOutputDir In $DataOutputDirs) {
+    ForEach ($DataOutputDir In $DataOutputDirs) {
         If (Test-Path -PathType Any $DataOutputDir) {
             Remove-Item -Recurse -Force $DataOutputDir
         }
@@ -400,7 +400,7 @@ Function Expand-Media ([string] $Media)
         Move-Item -Force -Path "${GruntzDataOutputDir}\MOVIEZ" -Destination $GruntzDataMoviesOutputDir
     }
 
-    Foreach ($DirectoryToMerge In $DirectoriesToMergeIntoRoot) {
+    ForEach ($DirectoryToMerge In $DirectoriesToMergeIntoRoot) {
         $DirectoryPath = "${GruntzDataOutputDir}\${DirectoryToMerge}"
 
         If (Test-Path -PathType Container $DirectoryPath) {
@@ -436,7 +436,7 @@ Function Remove-UselessFiles
 
     $UselessFiles += $DirectoriesToMergeIntoRoot
 
-    Foreach ($UselessFile In $UselessFiles) {
+    ForEach ($UselessFile In $UselessFiles) {
         $UselessFilePath = "${GruntzDataOutputDir}\${UselessFile}"
 
         If (Test-Path -PathType Any $UselessFilePath) {
@@ -584,7 +584,7 @@ Function Convert-Binaries
         Write-Output "> Cracking ${GruntzDataOutputDir}\GRUNTZ.EXE"
 
         Try {
-            [Byte[]] $Bytes = Get-Content "${GruntzDataOutputDir}\GRUNTZ.EXE" -Encoding Byte
+            [byte[]] $Bytes = Get-Content "${GruntzDataOutputDir}\GRUNTZ.EXE" -Encoding Byte
 
             If ($UseOriginalCrack) {
                 $Bytes[0x0001F4CC] = 0x2E
@@ -632,7 +632,7 @@ Function Convert-Binaries
         Write-Output "> Cracking ${PatchDataOutputDir}\GRUNTZ.EXE"
 
         Try {
-            [Byte[]] $Bytes = Get-Content "${PatchDataOutputDir}\GRUNTZ.EXE" -Encoding Byte
+            [byte[]] $Bytes = Get-Content "${PatchDataOutputDir}\GRUNTZ.EXE" -Encoding Byte
 
             If ($UseOriginalCrack) {
                 $Bytes[0x0001F4DC] = 0x2E
@@ -686,7 +686,7 @@ Function Publish-Installer
     If ($ExcludeMovies) {
         $ExcludeString += 'eu.murda.gruntz.movies'
 
-        $global:InstallerName = "${InstallerName}-no-movie"
+        $Global:InstallerName = "${InstallerName}-no-movie"
     }
 
     If ($ExcludeString) {
@@ -696,14 +696,14 @@ Function Publish-Installer
     If ($UseDgVoodooDdraw) {
         $ExcludeString += 'eu.murda.gruntz.ddraw'
 
-        $global:InstallerName = "${InstallerName}-dgvoodoo"
+        $Global:InstallerName = "${InstallerName}-dgvoodoo"
     } Else {
         $ExcludeString += 'eu.murda.gruntz.dgvoodoo.ddraw'
     }
 
     $Params += '-e', "${ExcludeString}"
 
-    $global:InstallerName = "${InstallerName}${InstallerExtension}"
+    $Global:InstallerName = "${InstallerName}${InstallerExtension}"
     $Params += "${InstallerName}"
 
     & (Get-BinaryCreator) $Params
@@ -720,3 +720,4 @@ Function Compress-Installer
 }
 
 . Main
+
