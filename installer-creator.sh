@@ -17,7 +17,7 @@
 # - Path to Gruntz ISO file
 # - Default, gruntz.iso
 
-RELATIVE_PATH=$(dirname ${0})
+RELATIVE_PATH=$(dirname "${0}")
 
 INSTALLER_NAME="${RELATIVE_PATH}/dist/gruntz-installer"
 INSTALLER_EXTENSION='.run'
@@ -36,7 +36,7 @@ BINARYCREATOR_FALLBACK=
 UPX_FALLBACK=
 
 # Handle parameters.
-if [ ! -z "${1}" ]; then
+if [ -n "${1}" ]; then
     MEDIA="${1}"
 fi
 
@@ -51,10 +51,10 @@ GET_VALUE_FROM_INI_FILE () {
 }
 
 # Reading settings from settings.ini file.
-if [ -z ${MEDIA} ]; then
+if [ -z "${MEDIA}" ]; then
     INI_MEDIA=$(GET_VALUE_FROM_INI_FILE media)
 
-    if [ ! -z ${INI_MEDIA} ]; then
+    if [ -n "${INI_MEDIA}" ]; then
         MEDIA=${INI_MEDIA}
     else
         MEDIA="${RELATIVE_PATH}/gruntz.iso"
@@ -64,7 +64,7 @@ fi
 if [ -z ${EXCLUDE_MOVIES} ]; then
     INI_EXCLUDE_MOVIES=$(GET_VALUE_FROM_INI_FILE unix_exclude_movies)
 
-    if [ ! -z ${INI_EXCLUDE_MOVIES} ]; then
+    if [ -n "${INI_EXCLUDE_MOVIES}" ]; then
         EXCLUDE_MOVIES=${INI_EXCLUDE_MOVIES}
     else
         EXCLUDE_MOVIES=1
@@ -74,7 +74,7 @@ fi
 if [ -z ${CRACK_BINARIES_IF_POSSIBLE} ]; then
     INI_CRACK_BINARIES_IF_POSSIBLE=$(GET_VALUE_FROM_INI_FILE crack_binaries_if_possible)
 
-    if [ ! -z ${INI_CRACK_BINARIES_IF_POSSIBLE} ]; then
+    if [ -n "${INI_CRACK_BINARIES_IF_POSSIBLE}" ]; then
         CRACK_BINARIES_IF_POSSIBLE=${INI_CRACK_BINARIES_IF_POSSIBLE}
     else
         CRACK_BINARIES_IF_POSSIBLE=1
@@ -84,7 +84,7 @@ fi
 if [ -z ${USE_ORIGINAL_CRACK} ]; then
     INI_USE_ORIGINAL_CRACK=$(GET_VALUE_FROM_INI_FILE use_original_crack)
 
-    if [ ! -z ${INI_USE_ORIGINAL_CRACK} ]; then
+    if [ -n "${INI_USE_ORIGINAL_CRACK}" ]; then
         USE_ORIGINAL_CRACK=${INI_USE_ORIGINAL_CRACK}
     else
         USE_ORIGINAL_CRACK=0
@@ -94,7 +94,7 @@ fi
 if [ -z ${COMPRESS_INSTALLER_IF_POSSIBLE} ]; then
     INI_COMPRESS_INSTALLER_IF_POSSIBLE=$(GET_VALUE_FROM_INI_FILE compress_installer_if_possible)
 
-    if [ ! -z ${INI_COMPRESS_INSTALLER_IF_POSSIBLE} ]; then
+    if [ -n "${INI_COMPRESS_INSTALLER_IF_POSSIBLE}" ]; then
         COMPRESS_INSTALLER_IF_POSSIBLE=${INI_COMPRESS_INSTALLER_IF_POSSIBLE}
     else
         COMPRESS_INSTALLER_IF_POSSIBLE=1
@@ -105,7 +105,7 @@ fi
 if [ -z ${WGET_FALLBACK} ]; then
     INI_WGET_FALLBACK=$(GET_VALUE_FROM_INI_FILE unix_wget_fallback)
 
-    if [ ! -z ${INI_WGET_FALLBACK} ]; then
+    if [ -n "${INI_WGET_FALLBACK}" ]; then
         WGET_FALLBACK=${INI_WGET_FALLBACK}
     fi
 fi
@@ -113,7 +113,7 @@ fi
 if [ -z ${P7ZIP_FALLBACK} ]; then
     INI_P7ZIP_FALLBACK=$(GET_VALUE_FROM_INI_FILE unix_p7zip_fallback)
 
-    if [ ! -z ${INI_P7ZIP_FALLBACK} ]; then
+    if [ -n "${INI_P7ZIP_FALLBACK}" ]; then
         P7ZIP_FALLBACK=${INI_P7ZIP_FALLBACK}
     fi
 fi
@@ -121,7 +121,7 @@ fi
 if [ -z ${BINARYCREATOR_FALLBACK} ]; then
     INI_BINARYCREATOR_FALLBACK=$(GET_VALUE_FROM_INI_FILE unix_binarycreator_fallback)
 
-    if [ ! -z ${INI_BINARYCREATOR_FALLBACK} ]; then
+    if [ -n "${INI_BINARYCREATOR_FALLBACK}" ]; then
         BINARYCREATOR_FALLBACK=${INI_BINARYCREATOR_FALLBACK}
     fi
 fi
@@ -129,7 +129,7 @@ fi
 if [ -z ${UPX_FALLBACK} ]; then
     INI_UPX_FALLBACK=$(GET_VALUE_FROM_INI_FILE unix_upx_fallback)
 
-    if [ ! -z ${INI_UPX_FALLBACK} ]; then
+    if [ -n "${INI_UPX_FALLBACK}" ]; then
         UPX_FALLBACK=${INI_UPX_FALLBACK}
     fi
 fi
@@ -414,7 +414,7 @@ COMPRESS_INSTALLER () {
 which wget 1> /dev/null 2>&1
 
 if [ "${?}" != '0' ]; then
-    if [ ! -z "${WGET_FALLBACK}" ]; then
+    if [ -n "${WGET_FALLBACK}" ]; then
         WGET="${WGET_FALLBACK}"
     else
         echo "> Unable to find wget from your environment's PATH variable."
@@ -428,7 +428,7 @@ fi
 which 7z 1> /dev/null 2>&1
 
 if [ "${?}" != '0' ]; then
-    if [ ! -z "${P7ZIP_FALLBACK}" ]; then
+    if [ -n "${P7ZIP_FALLBACK}" ]; then
         P7ZIP="${P7ZIP_FALLBACK}"
     else
         echo "> Unable to find 7z from your environment's PATH variable."
@@ -452,7 +452,7 @@ fi
 which binarycreator 1> /dev/null 2>&1
 
 if [ "${?}" != '0' ]; then
-    if [ ! -z "${BINARYCREATOR_FALLBACK}" ]; then
+    if [ -n "${BINARYCREATOR_FALLBACK}" ]; then
         BINARYCREATOR="${BINARYCREATOR_FALLBACK_FALLBACK}"
     else
         echo "> Unable to find binarycreator from your environment's PATH variable."
@@ -468,7 +468,7 @@ echo "> BinaryCreator binary found at: '${BINARYCREATOR}'"
 which upx 1> /dev/null 2>&1
 
 if [ "${?}" != '0' ]; then
-    if [ ! -z "${UPX_FALLBACK}" ]; then
+    if [ -n "${UPX_FALLBACK}" ]; then
         UPX="${UPX_FALLBACK}"
         echo "> UPX binary found at: '${UPX}'"
     else
