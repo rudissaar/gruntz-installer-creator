@@ -190,7 +190,7 @@ TEST_MEDIA () {
 CLEAR_DATA_OUTPUT_DIRS () {
     for DIR_TO_CLEAR in $(find "${RELATIVE_PATH}" -type d -name 'data')
     do
-        rm -r "${DIR_TO_CLEAR}/"*
+        rm -r "${DIR_TO_CLEAR:?}/"*
     done
 }
 
@@ -199,9 +199,11 @@ EXPAND_MEDIA () {
 }
 
 MERGE_SUBDIRECTORY_TO_ROOT () {
-    if [ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${1}" ]; then
-        mv "${GRUNTZ_DATA_OUTPUT_DIR}/${1}/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
-        rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/${1}"
+    SUBDIRECTORY="${GRUNTZ_DATA_OUTPUT_DIR}/${1}"
+
+    if [ -d "${SUBDIRECTORY}" ]; then
+        mv "${SUBDIRECTORY}/"* "${GRUNTZ_DATA_OUTPUT_DIR}"
+        rm -r "${SUBDIRECTORY}"
     fi
 }
 
@@ -227,12 +229,14 @@ REMOVE_USELESS_FILES () {
         'REDIST' \
         'SYSTEM'
     do
-        if [ -f "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}" ]; then
-            rm "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}"
+        USELESS_FILE_PATH="${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}"
+
+        if [ -f "${USELESS_FILE_PATH}" ]; then
+            rm "${USELESS_FILE_PATH}"
         fi
 
-        if [ -d "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}" ]; then
-            rm -r "${GRUNTZ_DATA_OUTPUT_DIR}/${USELESS_FILE}"
+        if [ -d "${USELESS_FILE_PATH}" ]; then
+            rm -r "${USELESS_FILE_PATH}"
         fi
     done
 }
