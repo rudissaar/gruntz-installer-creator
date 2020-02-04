@@ -172,7 +172,7 @@ TEST_MEDIA () {
     for VALID_HASH in \
         '275547756A472DA85298F7B86FBAF197'
     do
-        MEDIA_HASH="$(md5sum ${MEDIA} | cut -d ' ' -f 1)"
+        MEDIA_HASH=$(md5sum "${MEDIA}" | cut -d ' ' -f 1)
 
         if [ "${VALID_HASH}" = "${MEDIA_HASH^^}" ]; then
             VALID_HASH_FOUND=1
@@ -306,7 +306,7 @@ REPLACE_BYTE () {
 CONVERT_BINARIES () {
     if [ "${CRACK_BINARIES_IF_POSSIBLE}" = '1' ]; then
         EXE_FILE="${GRUNTZ_DATA_OUTPUT_DIR}/GRUNTZ.EXE"
-        EXE_HASH="$(md5sum ${EXE_FILE} | cut -d ' ' -f 1)"
+        EXE_HASH=$(md5sum "${EXE_FILE}" | cut -d ' ' -f 1)
 
         case "${EXE_HASH^^}" in
             '81C7F648DB99501BED6E1EE71E66E4A0')
@@ -345,7 +345,7 @@ CONVERT_BINARIES () {
         esac
 
         PATCH_FILE="${PATCH_DATA_OUTPUT_DIR}/GRUNTZ.EXE"
-        PATCH_HASH=$(md5sum ${PATCH_FILE} | cut -d ' ' -f 1)
+        PATCH_HASH=$(md5sum "${PATCH_FILE}" | cut -d ' ' -f 1)
 
         case "${PATCH_HASH^^}" in
             '199D4613E4587E1D720623DC11569E4D')
@@ -411,9 +411,7 @@ COMPRESS_INSTALLER () {
     fi
 }
 
-which wget 1> /dev/null 2>&1
-
-if [ "${?}" != '0' ]; then
+if ! command -v wget 1> /dev/null 2>&1; then
     if [ -n "${WGET_FALLBACK}" ]; then
         WGET="${WGET_FALLBACK}"
     else
@@ -422,12 +420,12 @@ if [ "${?}" != '0' ]; then
         exit 1
     fi
 else
-    WGET="$(which wget)"
+    WGET="$(command -v wget 2> /dev/null)"
 fi
 
-which 7z 1> /dev/null 2>&1
+echo "> Wget binary found at: '${WGET}'"
 
-if [ "${?}" != '0' ]; then
+if ! command -v 7z 1> /dev/null 2>&1; then
     if [ -n "${P7ZIP_FALLBACK}" ]; then
         P7ZIP="${P7ZIP_FALLBACK}"
     else
@@ -436,22 +434,18 @@ if [ "${?}" != '0' ]; then
         exit 1
     fi
 else
-    P7ZIP="$(which 7z)"
+    P7ZIP="$(command -v 7z 2> /dev/null)"
 fi
 
 echo "> 7z binary found at: '${P7ZIP}'"
 
-which 7z 1> /dev/null 2>&1
-
-if [ "${?}" != '0' ]; then
+if ! command -v 7z 1> /dev/null 2>&1; then
     echo "> Unable to find 7z from your environment's PATH variable."
     echo '> Aborting.'
     exit 1
 fi
 
-which binarycreator 1> /dev/null 2>&1
-
-if [ "${?}" != '0' ]; then
+if ! command -v binarycreator 1> /dev/null 2>&1; then
     if [ -n "${BINARYCREATOR_FALLBACK}" ]; then
         BINARYCREATOR="${BINARYCREATOR_FALLBACK_FALLBACK}"
     else
@@ -460,14 +454,12 @@ if [ "${?}" != '0' ]; then
         exit 1
     fi
 else
-    BINARYCREATOR="$(which binarycreator)"
+    BINARYCREATOR="$(command -v binarycreator 2> /dev/null)"
 fi
 
 echo "> BinaryCreator binary found at: '${BINARYCREATOR}'"
 
-which upx 1> /dev/null 2>&1
-
-if [ "${?}" != '0' ]; then
+if ! command -v upx 1> /dev/null 2>&1; then
     if [ -n "${UPX_FALLBACK}" ]; then
         UPX="${UPX_FALLBACK}"
         echo "> UPX binary found at: '${UPX}'"
@@ -480,7 +472,7 @@ if [ "${?}" != '0' ]; then
         COMPRESS_INSTALLER_IF_POSSIBLE=0
     fi
 else
-    UPX="$(which upx)"
+    UPX="$(command -v upx 2> /dev/null)"
     echo "> UPX binary found at: '${UPX}'"
 fi
 
