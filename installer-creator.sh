@@ -9,6 +9,7 @@
 # REQUIREMENTS
 # - wget
 # - awk
+# - find
 # - p7zip
 # - Qt Installer Framework 3.0 or higher
 # - UPX (Optional)
