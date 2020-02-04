@@ -47,7 +47,7 @@ fi
 
 # Function that reads settings.ini file and return values from it.
 GET_VALUE_FROM_INI_FILE () {
-    echo $(awk -F '=' '/'${1}'/ {print $2}' "${RELATIVE_PATH}/settings.ini")
+    awk -F '=' '/'"${1}"'/ {print $2}' "${RELATIVE_PATH}/settings.ini"
 }
 
 # Reading settings from settings.ini file.
@@ -169,8 +169,9 @@ TEST_MEDIA () {
 
     VALID_HASH_FOUND=0
 
+    # shellcheck disable=SC2043
     for VALID_HASH in \
-        '275547756A472DA85298F7B86FBAF197'
+        275547756A472DA85298F7B86FBAF197
     do
         MEDIA_HASH=$(md5sum "${MEDIA}" | cut -d ' ' -f 1)
 
@@ -188,10 +189,14 @@ TEST_MEDIA () {
 }
 
 CLEAR_DATA_OUTPUT_DIRS () {
-    for DIR_TO_CLEAR in $(find "${RELATIVE_PATH}" -type d -name 'data')
+    BASENAME=$(basename "${0}")
+    TMP_FILE=$(mktemp /tmp/"${BASENAME}".XXXXXX)
+    find "${RELATIVE_PATH}" -type d -name 'data' > "${TMP_FILE}"
+    while IFS= read -r DIR_TO_CLEAR
     do
-        rm -r "${DIR_TO_CLEAR:?}/"*
-    done
+        rm -rf "${DIR_TO_CLEAR:?}/"*
+    done < "${TMP_FILE}"
+    rm "${TMP_FILE}"
 }
 
 EXPAND_MEDIA () {
@@ -304,7 +309,10 @@ IMPORT_CUSTOM_LEVEL_DIRTLAND () {
 }
 
 REPLACE_BYTE () {
-    printf "$(printf '\\x%02X' ${3})" | dd of="${1}" bs=1 seek=$(printf "%d" ${2}) count=1 conv=notrunc &> /dev/null
+    # shellcheck disable=SC2059
+    printf "$(printf '\\x%02X' "${3}")" | dd of="${1}" bs=1 seek="$(printf "%d" "${2}")" count=1 conv=notrunc \
+        1> /dev/null \
+        2> /dev/null
 }
 
 CONVERT_BINARIES () {
